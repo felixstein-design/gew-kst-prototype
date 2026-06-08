@@ -60,6 +60,18 @@ body {
   align-items: center;
   justify-content: center;
 }
+.sidebar-logo-link {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 6px;
+  transition: opacity 0.15s;
+}
+.sidebar-logo-link:hover { opacity: 0.85; }
+.sidebar-logo-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
 .sidebar-logo-mark {
   width: 28px; height: 28px;
   background: #006666;
