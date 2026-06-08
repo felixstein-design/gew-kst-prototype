@@ -163,7 +163,7 @@ function initTransmissionPage() {
   steuerschuldEl.textContent = formatAmountDotted(gewerbesteuer) + ' €';
 }
 var FORM_PREVIEW_PAGE_COUNT = 9;
-var FORM_PREVIEW_IMAGE_BASE = '../assets/gewst1a/page-';
+var FORM_PREVIEW_IMAGE_BASE = '/assets/gewst1a/page-';
 var FORM_PREVIEW_FIELDS = {
   1: [
     { kind: 'text', top: 22.5, left: 40.5, width: 55, value: 'BERLIN MITTE' },
