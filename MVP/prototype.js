@@ -67,12 +67,8 @@ function markCellEdited(el) {
   var original = el.getAttribute('data-autofill-value');
   if (original == null) return;
 
-  var current = (el.textContent != null ? el.textContent : el.value || '')
-    .trim()
-    .replace(/\u00a0/g, ' ')
-    .replace(/\s/g, '');
-
-  var origNorm = original.trim().replace(/\s/g, '');
+  var current = normalizeEditableAmount(el.textContent != null ? el.textContent : el.value || '');
+  var origNorm = normalizeEditableAmount(original);
 
   cell.classList.toggle('cell-overridden', current !== '' && current !== origNorm);
 
@@ -85,15 +81,16 @@ function selectTransmissionCard(which) {
   var sofort = document.getElementById('card-sofort');
   var vorbehalt = document.getElementById('card-vorbehalt');
   var primaryBtn = document.getElementById('transmissionPrimaryBtn');
+  var isKst = document.body && document.body.dataset.flow === 'kst';
   if (sofort) sofort.classList.toggle('selected', which === 'sofort');
   if (vorbehalt) vorbehalt.classList.toggle('selected', which === 'vorbehalt');
   if (primaryBtn) {
     if (which === 'sofort') {
       primaryBtn.textContent = 'Senden';
-      primaryBtn.href = '07_dashboard-eingereicht.html';
+      primaryBtn.href = isKst ? '09_dashboard-eingereicht.html' : '07_dashboard-eingereicht.html';
     } else {
       primaryBtn.textContent = 'Speichern';
-      primaryBtn.href = '06_dashboard-saved.html';
+      primaryBtn.href = isKst ? '08_dashboard-saved.html' : '06_dashboard-saved.html';
     }
   }
 }
@@ -103,6 +100,16 @@ var GEWERBESTEUER_STORAGE_KEY = 'gewstMvpGewerbesteuer';
 
 function parseGermanAmount(str) {
   return parseFloat(String(str || '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+}
+
+function normalizeEditableAmount(str) {
+  var s = String(str || '').trim().replace(/\u00a0/g, ' ').replace(/\s/g, '');
+  if (s.indexOf(',') !== -1 && s.indexOf('.') !== -1) return s.replace(/,/g, '');
+  if (s.indexOf(',') !== -1 && s.indexOf('.') === -1) {
+    var parts = s.split(',');
+    if (parts.length === 2 && parts[1].length <= 2) return parts[0] + '.' + parts[1];
+  }
+  return s;
 }
 
 function formatAmountSpaced(num) {
@@ -159,11 +166,18 @@ function initBerechnungPage() {
 function initTransmissionPage() {
   var steuerschuldEl = document.getElementById('steuerschuldValue');
   if (!steuerschuldEl) return;
-  var gewerbesteuer = getGewerbesteuerAmount();
-  steuerschuldEl.textContent = formatAmountDotted(gewerbesteuer) + ' €';
+  var isKst = document.body && document.body.dataset.flow === 'kst';
+  var amount = isKst ? getKstTaxTotal() : getGewerbesteuerAmount();
+  steuerschuldEl.textContent = formatAmountDotted(amount) + ' €';
 }
 var FORM_PREVIEW_PAGE_COUNT = 9;
-var FORM_PREVIEW_IMAGE_BASE = '/assets/gewst1a/page-';
+function getPrototypeAssetBase() {
+  var script = document.querySelector('script[src*="prototype.js"]');
+  if (!script) return new URL('../../assets/gewst1a/page-', window.location.href).href;
+  var scriptUrl = new URL(script.getAttribute('src'), window.location.href);
+  return new URL('../assets/gewst1a/page-', scriptUrl).href;
+}
+var FORM_PREVIEW_IMAGE_BASE = getPrototypeAssetBase();
 var FORM_PREVIEW_FIELDS = {
   1: [
     { kind: 'text', top: 22.5, left: 40.5, width: 55, value: 'BERLIN MITTE' },
@@ -394,12 +408,112 @@ function initDashboardPage() {
   gewerbesteuerEl.textContent = amount > 0 ? formatAmountDotted(amount) : '—';
 }
 
+/* ── KSt flow ─────────────────────────────────────────────── */
+var KST_TAXABLE_INCOME = 2856.97;
+var KST_DEFAULT_RATE = 15;
+var KST_STORAGE_KEY = 'kstMvpTaxTotal';
+
+function getKstTaxTotal() {
+  var stored = sessionStorage.getItem(KST_STORAGE_KEY);
+  if (stored != null && stored !== '') return parseFloat(stored) || 0;
+  var input = document.getElementById('kstRateInput');
+  if (input) return recalcKstTax(false);
+  return KST_TAXABLE_INCOME * KST_DEFAULT_RATE / 100 * 1.055;
+}
+
+function recalcKstTax(persist) {
+  if (persist == null) persist = true;
+  var rateInput = document.getElementById('kstRateInput');
+  var kstEl = document.getElementById('kstAmountValue');
+  var soliEl = document.getElementById('kstSoliValue');
+  var totalEl = document.getElementById('kstTotalTaxValue');
+  var rate = rateInput ? parseGermanAmount(String(rateInput.value).replace('%', '')) : KST_DEFAULT_RATE;
+  var kst = KST_TAXABLE_INCOME * rate / 100;
+  var soli = kst * 0.055;
+  var total = kst + soli;
+
+  if (kstEl) kstEl.textContent = formatAmountSpaced(kst);
+  if (soliEl) soliEl.textContent = formatAmountSpaced(soli);
+  if (totalEl) totalEl.textContent = formatAmountSpaced(total);
+
+  var rateTaxEl = document.getElementById('kstRateTaxValue');
+  if (rateTaxEl) rateTaxEl.textContent = formatAmountSpaced(kst);
+
+  var amountDotted = formatAmountDotted(total);
+  ['kstBookingExpenseSoll', 'kstBookingExpenseTotal', 'kstBookingLiabilityHaben', 'kstBookingLiabilityTotal'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = amountDotted;
+  });
+
+  if (persist) sessionStorage.setItem(KST_STORAGE_KEY, String(total));
+  return total;
+}
+
+function initKstBuchungssaetzePage() {
+  var input = document.getElementById('kstRateInput');
+  if (!input) return;
+  input.addEventListener('input', function() { recalcKstTax(true); });
+  input.addEventListener('blur', function() { recalcKstTax(true); });
+  recalcKstTax(true);
+}
+
+function initKstBerechnungPage() {
+  if (document.getElementById('kstRateInput')) return;
+  var kstEl = document.getElementById('kstAmountValue');
+  if (!kstEl || !document.getElementById('kstTotalTaxValue')) return;
+  var total = getKstTaxTotal();
+  var kst = total / 1.055;
+  var soli = total - kst;
+  kstEl.textContent = formatAmountSpaced(kst);
+  var soliEl = document.getElementById('kstSoliValue');
+  if (soliEl) soliEl.textContent = formatAmountSpaced(soli);
+  var totalEl = document.getElementById('kstTotalTaxValue');
+  if (totalEl) totalEl.textContent = formatAmountSpaced(total);
+}
+
+function initKstDashboardPage() {
+  var kstEl = document.getElementById('dashboardKstAmount');
+  if (!kstEl) return;
+  var total = getKstTaxTotal();
+  var kstOnly = total / 1.055;
+  var soli = total - kstOnly;
+  kstEl.textContent = formatAmountDotted(kstOnly);
+  var soliEl = document.getElementById('dashboardKstSoli');
+  if (soliEl) soliEl.textContent = formatAmountDotted(soli);
+  var entriesEl = document.getElementById('dashboardKstEntries');
+  if (entriesEl) entriesEl.textContent = total > 0 ? formatAmountDotted(total) : '—';
+}
+
+function initKstFormPreview() {
+  var page = document.getElementById('kstPreviewPage');
+  if (!page) return;
+  pdfPreviewState.pageCount = 1;
+  pdfPreviewState.rendered = true;
+  pdfPreviewState.basePageWidth = 820;
+  updatePdfPreviewUi();
+}
+
+function exportKstPreviewMock() {
+  var img = document.querySelector('#kstPreviewPage img');
+  if (!img || !img.src) return;
+  var link = document.createElement('a');
+  link.href = img.src;
+  link.download = 'KSt_2025_Vorschau.png';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   initBerechnungPage();
   initTransmissionPage();
   initDashboardPage();
+  initKstBuchungssaetzePage();
+  initKstBerechnungPage();
+  initKstDashboardPage();
+  initKstFormPreview();
 
-  if (document.getElementById('pdfPreviewPages')) {
+  if (document.getElementById('pdfPreviewPages') && !document.getElementById('kstPreviewPage')) {
     renderFormPreviewPdf(false).then(function() {
       pdfPreviewFitWidth();
       pdfPreviewGoToPage(1);

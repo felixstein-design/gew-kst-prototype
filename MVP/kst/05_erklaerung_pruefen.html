@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screen 4 — Erklärung prüfen</title>
-  <link rel="stylesheet" href="../styles.css">
+  <title>KSt — Erklärung prüfen</title>
+  <link rel="stylesheet" href="../../styles.css">
 </head>
 <body class="erklaerung-print">
 <div class="layout">
@@ -27,62 +27,64 @@
     <div class="wizard-header">
       <div class="wizard-meta">
         <div>
-          <div class="wizard-title">Gewerbesteuererklärung</div>
+          <div class="wizard-title">Körperschaftsteuererklärung</div>
           <div class="wizard-subtitle">Geschäftsjahr 2025 · Erklärung prüfen</div>
         </div>
-        <div class="wizard-progress-text">3/4 Schritte erledigt</div>
+        <div class="wizard-progress-text">4/5 Schritte erledigt</div>
       </div>
       <nav class="wizard-steps">
         <a href="02_bemessungsgrundlagen.html" class="wizard-step completed"><span class="wizard-step-num">1</span> Bemessungsgrundlagen</a>
         <a href="03_berechnung.html" class="wizard-step completed"><span class="wizard-step-num">2</span> Berechnung</a>
-        <span class="wizard-step active"><span class="wizard-step-num">3</span> Erklärung prüfen</span>
-        <span class="wizard-step"><span class="wizard-step-num">4</span> Übermittlung</span>
+        <a href="04_buchungssaetze.html" class="wizard-step completed"><span class="wizard-step-num">3</span> Buchungssätze</a>
+        <span class="wizard-step active"><span class="wizard-step-num">4</span> Erklärung prüfen</span>
+        <span class="wizard-step"><span class="wizard-step-num">5</span> Übermittlung</span>
       </nav>
     </div>
 
     <div class="main main--pdf-step">
       <div class="erklaerung-step-intro">
         <div class="section-title" style="margin-top:0;">Erklärung prüfen</div>
-        <p class="text-small text-muted">Vordruck GewSt 1 A (2024) · Hausmann &amp; Partner GmbH · Werte aus Schritt 1 und 2</p>
+        <p class="text-small text-muted">Körperschaftsteuererklärung · Hausmann &amp; Partner GmbH · Mock-Vorschau aus Schritt 1</p>
       </div>
 
       <div class="pdf-export-viewer pdf-export-viewer--page">
         <div class="pdf-export-toolbar">
           <div class="pdf-export-toolbar-left">
-            <span class="pdf-export-doc-title">GewSt 1 A · Gewerbesteuererklärung</span>
+            <span class="pdf-export-doc-title">KSt · Körperschaftsteuererklärung</span>
             <span class="pdf-export-doc-meta">Geschäftsjahr 2025 · Vorschau — nicht zur Einreichung</span>
           </div>
           <div class="pdf-export-toolbar-center">
-            <button type="button" class="pdf-export-btn" onclick="pdfPreviewPrevPage()" aria-label="Vorherige Seite">‹</button>
-            <input type="number" class="pdf-export-page-input" id="pdfPageInput" min="1" value="1" onchange="pdfPreviewGoToPage(this.value)">
-            <span class="pdf-export-page-total">/ <span id="pdfPageTotal">9</span></span>
-            <button type="button" class="pdf-export-btn" onclick="pdfPreviewNextPage()" aria-label="Nächste Seite">›</button>
+            <button type="button" class="pdf-export-btn" disabled aria-label="Vorherige Seite">‹</button>
+            <input type="number" class="pdf-export-page-input" value="1" disabled>
+            <span class="pdf-export-page-total">/ 1</span>
+            <button type="button" class="pdf-export-btn" disabled aria-label="Nächste Seite">›</button>
           </div>
           <div class="pdf-export-toolbar-right">
             <button type="button" class="pdf-export-btn" onclick="pdfPreviewZoom(-0.1)">−</button>
             <span class="pdf-export-zoom-label" id="pdfZoomLabel">100%</span>
             <button type="button" class="pdf-export-btn" onclick="pdfPreviewZoom(0.1)">+</button>
             <button type="button" class="pdf-export-btn" onclick="pdfPreviewFitWidth()">An Breite</button>
-            <button type="button" class="pdf-export-btn is-primary" onclick="exportFormPreviewPdf()">PDF exportieren</button>
+            <button type="button" class="pdf-export-btn is-primary" onclick="exportKstPreviewMock()">PDF exportieren</button>
             <button type="button" class="pdf-export-btn" onclick="printFormPreview()">Drucken</button>
           </div>
         </div>
         <div class="pdf-export-scroll" id="pdfPreviewScroll">
-          <div class="pdf-export-pages" id="pdfPreviewPages">
-            <div class="pdf-export-loading" id="pdfPreviewLoading">PDF wird geladen …</div>
+          <div class="pdf-export-pages" id="pdfPreviewPages" data-flow="kst">
+            <div class="pdf-export-page" id="kstPreviewPage" style="width:820px;">
+              <img src="../../assets/kst/preview-page.png" alt="KSt Erklärung Seite 1" width="820">
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="wizard-footer">
-      <a href="05_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
-      <a href="05_uebermittlung.html" class="btn btn-primary">Speichern und Weiter</a>
+      <a href="07_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
+      <a href="06_uebermittlung.html" class="btn btn-primary">Speichern und Weiter</a>
     </div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<script src="prototype.js"></script>
+<script src="../prototype.js"></script>
 </body>
 </html>

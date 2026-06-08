@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screen 5 — Übermittlung</title>
-  <link rel="stylesheet" href="../styles.css">
+  <title>KSt — Übermittlung</title>
+  <link rel="stylesheet" href="../../styles.css">
 </head>
-<body>
+<body data-flow="kst">
 <div class="layout">
   <aside class="sidebar">
     <div class="sidebar-logo"><a href="/" class="sidebar-logo-link" aria-label="Zurück zur Startseite"><div class="sidebar-logo-mark">P</div></a></div>
@@ -27,16 +27,17 @@
     <div class="wizard-header">
       <div class="wizard-meta">
         <div>
-          <div class="wizard-title">Gewerbesteuererklärung</div>
+          <div class="wizard-title">Körperschaftsteuererklärung</div>
           <div class="wizard-subtitle">Geschäftsjahr 2025 · Übermittlung</div>
         </div>
-        <div class="wizard-progress-text">4/4 Schritte erledigt</div>
+        <div class="wizard-progress-text">5/5 Schritte erledigt</div>
       </div>
       <nav class="wizard-steps">
         <a href="02_bemessungsgrundlagen.html" class="wizard-step completed"><span class="wizard-step-num">1</span> Bemessungsgrundlagen</a>
         <a href="03_berechnung.html" class="wizard-step completed"><span class="wizard-step-num">2</span> Berechnung</a>
-        <a href="04_erklaerung_pruefen.html" class="wizard-step completed"><span class="wizard-step-num">3</span> Erklärung prüfen</a>
-        <span class="wizard-step active"><span class="wizard-step-num">4</span> Übermittlung</span>
+        <a href="04_buchungssaetze.html" class="wizard-step completed"><span class="wizard-step-num">3</span> Buchungssätze</a>
+        <a href="05_erklaerung_pruefen.html" class="wizard-step completed"><span class="wizard-step-num">4</span> Erklärung prüfen</a>
+        <span class="wizard-step active"><span class="wizard-step-num">5</span> Übermittlung</span>
       </nav>
     </div>
 
@@ -77,7 +78,7 @@
           <table class="transmission-summary-table">
             <thead>
               <tr>
-                <th colspan="2">Vorauszahlung / Überschuss</th>
+                <th colspan="2">Steuerlast KSt + Soli</th>
                 <th></th>
               </tr>
             </thead>
@@ -85,7 +86,7 @@
               <tr>
                 <td>Steuerschuld</td>
                 <td>Gesamt</td>
-                <td class="col-right col-mono"><strong id="steuerschuldValue">0,00 €</strong></td>
+                <td class="col-right col-mono"><strong id="steuerschuldValue">452,12 €</strong></td>
               </tr>
             </tbody>
           </table>
@@ -135,12 +136,12 @@
     </div>
 
     <div class="wizard-footer">
-      <a href="05_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
-      <a href="06_dashboard-saved.html" class="btn btn-primary" id="transmissionPrimaryBtn">Speichern</a>
+      <a href="07_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
+      <a href="08_dashboard-saved.html" class="btn btn-primary" id="transmissionPrimaryBtn">Speichern</a>
     </div>
   </div>
 </div>
 
-<script src="prototype.js"></script>
+<script src="../prototype.js"></script>
 </body>
 </html>

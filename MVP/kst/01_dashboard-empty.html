@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Screen 1 — Dashboard (leer)</title>
-  <link rel="stylesheet" href="../styles.css">
+  <title>KSt — Dashboard (leer)</title>
+  <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
 <div class="layout">
@@ -26,20 +26,20 @@
   <div class="content">
     <div class="page-titlebar">
       <div>
-        <h1>Gewerbesteuer-Erklärungen</h1>
-        <div class="page-titlebar-meta">Mandant: Hausmann &amp; Partner GmbH</div>
+        <h1>Körperschaftsteuer (KSt)</h1>
+        <div class="page-titlebar-meta">Mandant: Hausmann &amp; Partner GmbH · Geschäftsjahr 2025</div>
       </div>
       <div class="page-controls">
-        <button class="btn btn-primary" onclick="openModal('createModal')">Gewerbesteuererklärung erstellen</button>
+        <button class="btn btn-primary" onclick="openModal('createModal')">Berechnung hinzufügen</button>
       </div>
     </div>
 
     <div class="main">
       <div class="empty-state">
-        <div class="empty-state-icon"><span class="ms">description</span></div>
-        <h2>Verwalten Sie Ihre Gewerbesteuer-Erklärungen</h2>
-        <p>Erstellen Sie Ihre erste Gewerbesteuererklärung für diesen Mandanten.</p>
-        <button class="btn btn-primary btn-lg" onclick="openModal('createModal')">Gewerbesteuererklärung erstellen</button>
+        <div class="empty-state-icon"><span class="ms">calculate</span></div>
+        <h2>Körperschaftsteuer berechnen</h2>
+        <p>Erstellen Sie Ihre erste Körperschaftsteuerberechnung für diesen Mandanten.</p>
+        <button class="btn btn-primary btn-lg" onclick="openModal('createModal')">Berechnung hinzufügen</button>
       </div>
     </div>
   </div>
@@ -47,8 +47,8 @@
 
 <div class="modal-overlay hidden" id="createModal">
   <div class="modal" style="max-width:400px;">
-    <div class="modal-title">Gewerbesteuererklärung erstellen</div>
-    <div class="modal-subtitle">Wählen Sie den Stichtag für die Erklärung.</div>
+    <div class="modal-title">Körperschaftsteuerberechnung erstellen</div>
+    <div class="modal-subtitle">Wählen Sie den Stichtag für die Berechnung.</div>
     <div class="form-field">
       <label class="form-label">Stichtag</label>
       <div class="disabled-date-tooltip">
@@ -58,7 +58,7 @@
         </div>
         <div class="info-tooltip" role="tooltip">
           <span class="ms info-tooltip-icon">info</span>
-          <p>Pro Geschäftsjahr ist derzeit nur eine Gewerbesteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+          <p>Pro Geschäftsjahr ist derzeit nur eine Körperschaftsteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
         </div>
       </div>
     </div>
@@ -69,6 +69,6 @@
   </div>
 </div>
 
-<script src="prototype.js"></script>
+<script src="../prototype.js"></script>
 </body>
 </html>

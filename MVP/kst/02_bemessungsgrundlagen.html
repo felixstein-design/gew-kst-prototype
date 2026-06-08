@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KSt — Bemessungsgrundlagen</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><a href="/" class="sidebar-logo-link" aria-label="Zurück zur Startseite"><div class="sidebar-logo-mark">P</div></a></div>
+    <div class="sidebar-roles">
+      <button class="role-btn active">Steuer­berater</button>
+      <button class="role-btn muted">Mandant</button>
+    </div>
+    <nav class="nav-main">
+      <a href="#" class="nav-item"><span class="ms">receipt_long</span>Buchführung</a>
+      <a href="#" class="nav-item"><span class="ms">assessment</span>Jahres­abschlüsse</a>
+      <a href="#" class="nav-item active"><span class="ms">account_balance</span>Besteuerung</a>
+      <a href="#" class="nav-item"><span class="ms">bar_chart</span>Auswertungen</a>
+      <a href="#" class="nav-item"><span class="ms">folder</span>Stammdaten</a>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <div class="wizard-header">
+      <div class="wizard-meta">
+        <div>
+          <div class="wizard-title">Körperschaftsteuererklärung</div>
+          <div class="wizard-subtitle">Geschäftsjahr 2025</div>
+        </div>
+        <div class="wizard-progress-text">1/5 Schritte erledigt</div>
+      </div>
+      <nav class="wizard-steps">
+        <span class="wizard-step active"><span class="wizard-step-num">1</span> Bemessungsgrundlagen</span>
+        <span class="wizard-step"><span class="wizard-step-num">2</span> Berechnung</span>
+        <span class="wizard-step"><span class="wizard-step-num">3</span> Buchungssätze</span>
+        <span class="wizard-step"><span class="wizard-step-num">4</span> Erklärung prüfen</span>
+        <span class="wizard-step"><span class="wizard-step-num">5</span> Übermittlung</span>
+      </nav>
+    </div>
+
+    <div class="main">
+
+      <div class="calc-date-row">
+        <label class="form-label">Stichtag</label>
+        <div class="disabled-date-tooltip" style="flex:1;">
+          <div class="form-input-with-icon">
+            <input type="text" class="form-input" value="31.12.2025" disabled>
+            <span class="ms input-icon">calendar_today</span>
+          </div>
+          <div class="info-tooltip" role="tooltip">
+            <span class="ms info-tooltip-icon">info</span>
+            <p>Pro Geschäftsjahr ist derzeit nur eine Körperschaftsteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gewst-table-block">
+        <div class="gewst-table-title">Körperschaftsteuererklärung 2025</div>
+        <table class="gewst-table">
+          <tbody>
+            <tr class="gewst-section-head">
+              <td colspan="2">I. §7 KStG — Ausgangsgröße</td>
+            </tr>
+            <tr class="gewst-row-open">
+              <td class="col-label">Jahresüberschuss/Jahresfehlbetrag</td>
+              <td class="col-value col-mono cell-autofill" id="cellJahresueberschuss">
+                <span class="cell-value-group">
+                  <span class="cell-override-icon" aria-label="Manuell geändert"><span class="ms">warning</span></span>
+                  <button type="button" class="open-badge" onclick="openSidePanel(this)">Open</button>
+                  <span contenteditable="true" data-autofill-value="2,856.97" onblur="markCellEdited(this)">2,856.97</span>
+                </span>
+              </td>
+            </tr>
+            <tr class="gewst-section-total">
+              <td class="col-label">Total:</td>
+              <td class="col-value col-mono">2,856.97</td>
+            </tr>
+
+            <tr class="gewst-section-head">
+              <td colspan="2">II. §8 KStG — Hinzurechnungen</td>
+            </tr>
+            <tr><td class="col-label">KSt/Soli-Aufwand (§10 Nr. 2 KStG)</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Gewerbesteuer (§4 Abs. 5b EStG)</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Nicht abziehbare Geschenke</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Nicht abzugsfähige Strafen/Verspätungszuschläge</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Nicht abzugsfähige Bewirtungskosten</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Nicht abzugsfähige Werbe-/Repräsentationskosten</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Sonstige nicht abziehbare Aufwendungen</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">50% nicht abziehbare Aufsichtsratsvergütung</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Steuernebenkosten n.a. (§4 Abs. 5b)</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Verdeckte Gewinnausschüttung</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Teilwertabschreibungen §8b Abs. 3 S. 1</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Veräußerungsverluste §8b Abs. 3 S. 2</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Veräußerungskosten Beteiligungen</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr class="gewst-table-add-line">
+              <td colspan="2"><a href="#" onclick="return false;"><span class="ms" style="font-size:16px;">add</span> Neue Zeile hinzufügen</a></td>
+            </tr>
+            <tr class="gewst-section-total">
+              <td class="col-label">Total:</td>
+              <td class="col-value col-mono">0.00</td>
+            </tr>
+
+            <tr class="gewst-section-head">
+              <td colspan="2">III. §8b KStG — Kürzungen</td>
+            </tr>
+            <tr><td class="col-label">Dividenden aus Kapitalgesellschaften (brutto)</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">95% steuerfreie Dividenden (§8b Abs. 1/5)</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Veräußerungsgewinne Beteiligungen (brutto)</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">95% steuerfreie Veräußerungsgewinne (§8b Abs. 2/3)</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Erträge aus Personengesellschaften</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr><td class="col-label">Steuerfreie Investitionszulagen</td><td class="col-value col-mono cell-autofill">0.00</td></tr>
+            <tr class="gewst-section-total">
+              <td class="col-label">Total:</td>
+              <td class="col-value col-mono">0.00</td>
+            </tr>
+
+            <tr class="gewst-summary">
+              <td class="col-label">Steuerliches Ergebnis (I + II − III)</td>
+              <td class="col-value col-mono">2,856.97</td>
+            </tr>
+            <tr class="gewst-summary">
+              <td class="col-label">Steuerliches Ergebnis</td>
+              <td class="col-value col-mono">2,856.97</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="wizard-footer">
+      <a href="07_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
+      <a href="03_berechnung.html" class="btn btn-primary">Speichern und Weiter</a>
+    </div>
+  </div>
+</div>
+
+<div class="side-panel" id="sidePanel">
+  <div class="side-panel-header">
+    Zellendetails
+    <button type="button" class="side-panel-close" onclick="closeSidePanel()" aria-label="Schließen">×</button>
+  </div>
+  <div class="side-panel-body">
+    <div class="side-panel-sync-banner is-synced" id="sidePanelBannerSynced">
+      <span class="ms">info</span>
+      Zelle mit Buchhaltung synchronisiert.
+    </div>
+    <div class="side-panel-sync-banner is-unsynced hidden" id="sidePanelBannerUnsynced">
+      <span class="ms">warning</span>
+      Nicht mehr mit der Buchhaltung synchronisiert. Der Wert wurde manuell geändert.
+    </div>
+
+    <div class="side-panel-value-card">
+      <div class="side-panel-value-label">Jahresüberschuss/Jahresfehlbetrag</div>
+      <div class="side-panel-value-amount" id="sidePanelValueAmount">2.856,97 €</div>
+    </div>
+
+    <div class="side-panel-section">
+      <div class="side-panel-section-head">
+        <div class="side-panel-section-head-left">
+          Berechnungsformel
+          <span class="ms">expand_more</span>
+        </div>
+        <a href="#" class="side-panel-glossary" onclick="return false;">
+          Glossar
+          <span class="ms" style="font-size:14px;">help_outline</span>
+        </a>
+      </div>
+      <span class="side-panel-formula-pill">Jahresabschluss</span>
+    </div>
+
+    <div class="side-panel-section">
+      <div class="side-panel-section-head">
+        <div class="side-panel-section-head-left">
+          Konten und Buchungen
+          <span class="ms">expand_more</span>
+        </div>
+      </div>
+      <table class="side-panel-entries-table">
+        <thead>
+          <tr>
+            <th>Quelle</th>
+            <th>Bezeichnung</th>
+            <th class="col-num">Soll €</th>
+            <th class="col-num">Haben €</th>
+            <th class="col-num">Saldo €</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="#" class="source-link" onclick="return false;">› 9000</a></td>
+            <td>Saldovortrag Sachkonten</td>
+            <td class="col-num">0,00</td>
+            <td class="col-num">0,00</td>
+            <td class="col-num balance-strong">2.856,97</td>
+          </tr>
+          <tr>
+            <td><a href="#" class="source-link" onclick="return false;">› 9600</a></td>
+            <td>Jahresüberschuss/Jahresfehlbetrag</td>
+            <td class="col-num">0,00</td>
+            <td class="col-num">2.856,97</td>
+            <td class="col-num balance-strong">−2.856,97</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="../prototype.js"></script>
+</body>
+</html>

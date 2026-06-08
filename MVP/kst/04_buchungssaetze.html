@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KSt — Buchungssätze</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><a href="/" class="sidebar-logo-link" aria-label="Zurück zur Startseite"><div class="sidebar-logo-mark">P</div></a></div>
+    <div class="sidebar-roles">
+      <button class="role-btn active">Steuer­berater</button>
+      <button class="role-btn muted">Mandant</button>
+    </div>
+    <nav class="nav-main">
+      <a href="#" class="nav-item"><span class="ms">receipt_long</span>Buchführung</a>
+      <a href="#" class="nav-item"><span class="ms">assessment</span>Jahres­abschlüsse</a>
+      <a href="#" class="nav-item active"><span class="ms">account_balance</span>Besteuerung</a>
+      <a href="#" class="nav-item"><span class="ms">bar_chart</span>Auswertungen</a>
+      <a href="#" class="nav-item"><span class="ms">folder</span>Stammdaten</a>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <div class="wizard-header">
+      <div class="wizard-meta">
+        <div>
+          <div class="wizard-title">Körperschaftsteuererklärung</div>
+          <div class="wizard-subtitle">Geschäftsjahr 2025</div>
+        </div>
+        <div class="wizard-progress-text">3/5 Schritte erledigt</div>
+      </div>
+      <nav class="wizard-steps">
+        <a href="02_bemessungsgrundlagen.html" class="wizard-step completed"><span class="wizard-step-num">1</span> Bemessungsgrundlagen</a>
+        <a href="03_berechnung.html" class="wizard-step completed"><span class="wizard-step-num">2</span> Berechnung</a>
+        <span class="wizard-step active"><span class="wizard-step-num">3</span> Buchungssätze</span>
+        <span class="wizard-step"><span class="wizard-step-num">4</span> Erklärung prüfen</span>
+        <span class="wizard-step"><span class="wizard-step-num">5</span> Übermittlung</span>
+      </nav>
+    </div>
+
+    <div class="main">
+
+      <div class="calc-date-row">
+        <label class="form-label">Stichtag</label>
+        <div class="disabled-date-tooltip" style="flex:1;">
+          <div class="form-input-with-icon">
+            <input type="text" class="form-input" value="31.12.2025" disabled>
+            <span class="ms input-icon">calendar_today</span>
+          </div>
+          <div class="info-tooltip" role="tooltip">
+            <span class="ms info-tooltip-icon">info</span>
+            <p>Pro Geschäftsjahr ist derzeit nur eine Körperschaftsteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="kst-tax-block">
+        <div class="kst-tax-block-title">Steuerbemessungsgrundlage</div>
+        <table class="kst-tax-table">
+          <tbody>
+            <tr>
+              <td class="col-label">Zu versteuerndes Einkommen</td>
+              <td class="col-value">2 856,97</td>
+            </tr>
+            <tr class="row-total">
+              <td class="col-label">Total</td>
+              <td class="col-value">2 856,97</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="kst-tax-block">
+        <div class="kst-tax-block-title">Körperschaftsteuer</div>
+        <table class="kst-tax-table">
+          <thead>
+            <tr>
+              <th class="col-label"></th>
+              <th class="col-rate">Steuersatz</th>
+              <th class="col-tax">Steuerbetrag</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-label">Körperschaftsteuer auf Einkommen</td>
+              <td class="col-rate col-value-manual">
+                <input type="text" class="berechnung-input" id="kstRateInput" value="15,00 %" aria-label="Körperschaftsteuersatz">
+              </td>
+              <td class="col-tax" id="kstRateTaxValue">428,55</td>
+            </tr>
+            <tr class="row-total">
+              <td class="col-label">Total</td>
+              <td class="col-rate"></td>
+              <td class="col-tax" id="kstAmountValue">428,55</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="entry-section">
+        <label class="entry-checkbox">
+          <input type="checkbox" id="generateEntry" onchange="toggleBookingEntry()">
+          Buchungssatz für Körperschaftsteuer erzeugen
+        </label>
+
+        <div class="entry-block hidden" id="entryBlock">
+          <div class="entry-header">
+            <select class="entry-select" aria-label="Journal">
+              <option selected>OD</option>
+            </select>
+            <div class="disabled-date-tooltip disabled-date-tooltip--compact">
+              <input type="text" class="entry-date" value="31.12.2025" disabled>
+              <div class="info-tooltip" role="tooltip">
+                <span class="ms info-tooltip-icon">info</span>
+                <p>Pro Geschäftsjahr ist derzeit nur eine Körperschaftsteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+              </div>
+            </div>
+            <span class="entry-label">KSt 2025</span>
+          </div>
+          <table class="entry-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="col-right">Soll</th>
+                <th class="col-right">Haben</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2200 — Körperschaftsteuer</td>
+                <td class="col-right col-mono" id="kstBookingExpenseSoll">452,12</td>
+                <td class="col-right col-mono">0,00</td>
+              </tr>
+              <tr>
+                <td>1776 — Körperschaftsteuer-Verbindlichkeit</td>
+                <td class="col-right col-mono">0,00</td>
+                <td class="col-right col-mono" id="kstBookingLiabilityHaben">452,12</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><strong>Summe</strong></td>
+                <td class="col-right col-mono"><strong id="kstBookingExpenseTotal">452,12</strong></td>
+                <td class="col-right col-mono"><strong id="kstBookingLiabilityTotal">452,12</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-footer">
+      <a href="07_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
+      <a href="05_erklaerung_pruefen.html" class="btn btn-primary">Speichern und Weiter</a>
+    </div>
+  </div>
+</div>
+<script src="../prototype.js"></script>
+</body>
+</html>
