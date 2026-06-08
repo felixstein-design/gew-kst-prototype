@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen 1 — Dashboard (leer)</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><div class="sidebar-logo-mark">P</div></div>
+    <div class="sidebar-roles">
+      <button class="role-btn active">Steuer­berater</button>
+      <button class="role-btn muted">Mandant</button>
+    </div>
+    <nav class="nav-main">
+      <a href="#" class="nav-item"><span class="ms">receipt_long</span>Buchführung</a>
+      <a href="#" class="nav-item"><span class="ms">assessment</span>Jahres­abschlüsse</a>
+      <a href="#" class="nav-item active"><span class="ms">account_balance</span>Besteuerung</a>
+      <a href="#" class="nav-item"><span class="ms">bar_chart</span>Auswertungen</a>
+      <a href="#" class="nav-item"><span class="ms">folder</span>Stammdaten</a>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <div class="page-titlebar">
+      <div>
+        <h1>Gewerbesteuer-Erklärungen</h1>
+        <div class="page-titlebar-meta">Mandant: Hausmann &amp; Partner GmbH</div>
+      </div>
+      <div class="page-controls">
+        <button class="btn btn-primary" onclick="openModal('createModal')">Gewerbesteuererklärung erstellen</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="empty-state">
+        <div class="empty-state-icon"><span class="ms">description</span></div>
+        <h2>Verwalten Sie Ihre Gewerbesteuer-Erklärungen</h2>
+        <p>Erstellen Sie Ihre erste Gewerbesteuererklärung für diesen Mandanten.</p>
+        <button class="btn btn-primary btn-lg" onclick="openModal('createModal')">Gewerbesteuererklärung erstellen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="createModal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-title">Gewerbesteuererklärung erstellen</div>
+    <div class="modal-subtitle">Wählen Sie den Stichtag für die Erklärung.</div>
+    <div class="form-field">
+      <label class="form-label">Stichtag</label>
+      <div class="form-input-with-icon">
+        <input type="text" class="form-input" value="31.03.2025" disabled>
+        <span class="ms input-icon">calendar_today</span>
+      </div>
+    </div>
+    <div class="modal-actions" style="justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeModal('createModal')">Abbrechen</button>
+      <a href="02_bemessungsgrundlagen.html" class="btn btn-primary">Weiter</a>
+    </div>
+  </div>
+</div>
+
+<script src="prototype.js"></script>
+</body>
+</html>

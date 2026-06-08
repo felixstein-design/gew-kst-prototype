@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen 5 — Übermittlung</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><div class="sidebar-logo-mark">P</div></div>
+    <div class="sidebar-roles">
+      <button class="role-btn active">Steuer­berater</button>
+      <button class="role-btn muted">Mandant</button>
+    </div>
+    <nav class="nav-main">
+      <a href="#" class="nav-item"><span class="ms">receipt_long</span>Buchführung</a>
+      <a href="#" class="nav-item"><span class="ms">assessment</span>Jahres­abschlüsse</a>
+      <a href="#" class="nav-item active"><span class="ms">account_balance</span>Besteuerung</a>
+      <a href="#" class="nav-item"><span class="ms">bar_chart</span>Auswertungen</a>
+      <a href="#" class="nav-item"><span class="ms">folder</span>Stammdaten</a>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <div class="wizard-header">
+      <div class="wizard-meta">
+        <div>
+          <div class="wizard-title">Gewerbesteuererklärung</div>
+          <div class="wizard-subtitle">Geschäftsjahr 2025 · Übermittlung</div>
+        </div>
+        <div class="wizard-progress-text">4/4 Schritte erledigt</div>
+      </div>
+      <nav class="wizard-steps">
+        <a href="02_bemessungsgrundlagen.html" class="wizard-step completed"><span class="wizard-step-num">1</span> Bemessungsgrundlagen</a>
+        <a href="03_berechnung.html" class="wizard-step completed"><span class="wizard-step-num">2</span> Berechnung</a>
+        <a href="04_erklaerung_pruefen.html" class="wizard-step completed"><span class="wizard-step-num">3</span> Erklärung prüfen</a>
+        <span class="wizard-step active"><span class="wizard-step-num">4</span> Übermittlung</span>
+      </nav>
+    </div>
+
+    <div class="main">
+      <div class="transmission-page">
+
+        <div class="toggle-row">
+          <div class="transmission-section-title">Übermittlung</div>
+          <div class="toggle">
+            <div class="toggle-switch"></div>
+            Festschreiben
+            <span class="text-muted transmission-info-icon" title="Buchungen werden beim Absenden festgeschrieben.">ⓘ</span>
+          </div>
+        </div>
+
+        <div class="radio-card" id="card-sofort" onclick="selectTransmissionCard('sofort')">
+          <div class="radio-dot"></div>
+          <div class="radio-card-body">
+            <div class="radio-card-title">Sofort einreichen</div>
+            <div class="radio-card-desc">Die Erklärung wird umgehend an die Finanzverwaltung übermittelt.</div>
+          </div>
+          <div class="radio-card-icon" style="color:#059669;">✓</div>
+        </div>
+
+        <div class="radio-card selected" id="card-vorbehalt" onclick="selectTransmissionCard('vorbehalt')">
+          <div class="radio-dot"></div>
+          <div class="radio-card-body">
+            <div class="radio-card-title">Jetzt nicht einreichen</div>
+            <div class="radio-card-desc">Die Erklärung wird als bereit markiert, aber nicht versendet. Sie können sie später bearbeiten und einreichen.</div>
+          </div>
+          <div class="radio-card-icon" style="color:#9ab5b0;">⏸</div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="transmission-summary">
+          <div class="transmission-summary-title">Geschäftsjahr 2025</div>
+          <table class="transmission-summary-table">
+            <thead>
+              <tr>
+                <th colspan="2">Vorauszahlung / Überschuss</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Steuerschuld</td>
+                <td>Gesamt</td>
+                <td class="col-right col-mono"><strong id="steuerschuldValue">0,00 €</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="divider">
+
+        <div class="transmission-email">
+          <div class="transmission-email-heading">E-Mail an Mandanten senden?</div>
+
+          <div class="transmission-email-banner">
+            <div class="transmission-email-banner-icon" aria-hidden="true">✉</div>
+            <div>
+              In wenigen Klicks Vorschau anzeigen und anpassen. Verleihen Sie Ihren Mandanten-E-Mails mühelos eine persönliche Note …
+            </div>
+          </div>
+
+          <div class="transmission-email-toggle-row">
+            <label class="transmission-email-toggle-label">
+              <span class="toggle">
+                <div class="toggle-switch"></div>
+                E-Mail senden, wenn Erklärung übermittelt wird
+              </span>
+            </label>
+            <span class="transmission-customizable-badge">Anpassbar</span>
+          </div>
+
+          <div class="transmission-email-details">
+            <p class="text-small text-muted">Wird gesendet, wenn die Erklärung an die Finanzverwaltung übermittelt wurde.</p>
+            <div class="transmission-recipients">
+              <span class="text-small text-muted">Empfänger:</span>
+              <span class="recipient-pill">max.mustermann@bertrag-ag.de</span>
+              <span class="recipient-pill">+1</span>
+            </div>
+            <div class="transmission-attachment">
+              <span class="ms" style="font-size:16px; color:#6c767f;">attach_file</span>
+              <a href="#">Autorisierungsprotokoll (.pdf)</a>
+            </div>
+            <button type="button" class="btn btn-ghost transmission-preview-btn">
+              <span class="ms" style="font-size:16px;">edit</span>
+              E-Mail-Vorschau und Anpassung
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="wizard-footer">
+      <a href="05_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
+      <a href="06_dashboard-saved.html" class="btn btn-primary" id="transmissionPrimaryBtn">Speichern</a>
+    </div>
+  </div>
+</div>
+
+<script src="prototype.js"></script>
+</body>
+</html>

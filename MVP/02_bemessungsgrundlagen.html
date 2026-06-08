@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen 2 — Bemessungsgrundlagen</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><div class="sidebar-logo-mark">P</div></div>
+    <div class="sidebar-roles">
+      <button class="role-btn active">Steuer­berater</button>
+      <button class="role-btn muted">Mandant</button>
+    </div>
+    <nav class="nav-main">
+      <a href="#" class="nav-item"><span class="ms">receipt_long</span>Buchführung</a>
+      <a href="#" class="nav-item"><span class="ms">assessment</span>Jahres­abschlüsse</a>
+      <a href="#" class="nav-item active"><span class="ms">account_balance</span>Besteuerung</a>
+      <a href="#" class="nav-item"><span class="ms">bar_chart</span>Auswertungen</a>
+      <a href="#" class="nav-item"><span class="ms">folder</span>Stammdaten</a>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <div class="wizard-header">
+      <div class="wizard-meta">
+        <div>
+          <div class="wizard-title">Gewerbesteuererklärung</div>
+          <div class="wizard-subtitle">Geschäftsjahr 2025</div>
+        </div>
+        <div class="wizard-progress-text">1/4 Schritte erledigt</div>
+      </div>
+      <nav class="wizard-steps">
+        <span class="wizard-step active"><span class="wizard-step-num">1</span> Bemessungsgrundlagen</span>
+        <span class="wizard-step"><span class="wizard-step-num">2</span> Berechnung</span>
+        <span class="wizard-step"><span class="wizard-step-num">3</span> Erklärung prüfen</span>
+        <span class="wizard-step"><span class="wizard-step-num">4</span> Übermittlung</span>
+      </nav>
+    </div>
+
+    <div class="main">
+
+      <div class="calc-date-row">
+        <label class="form-label">Calculation date</label>
+        <div class="form-input-with-icon" style="flex:1;">
+          <input type="text" class="form-input" value="31/12/2025" disabled>
+          <span class="ms input-icon">calendar_today</span>
+        </div>
+      </div>
+
+      <div class="gewst-table-block">
+        <div class="gewst-table-title">Gewerbesteuererklärung 2025</div>
+        <table class="gewst-table">
+          <tbody>
+            <tr class="gewst-section-head">
+              <td colspan="2">I. §7 GewStG — Gewinn aus Gewerbebetrieb</td>
+            </tr>
+            <tr>
+              <td class="col-label">Gewinn aus Gewerbebetrieb</td>
+              <td class="col-value col-mono cell-autofill">54,612.36</td>
+            </tr>
+            <tr>
+              <td class="col-label">Hinzurechnung Gewerbesteueraufwand</td>
+              <td class="col-value col-mono cell-autofill">3,290.00</td>
+            </tr>
+            <tr class="gewst-section-total">
+              <td class="col-label">Total:</td>
+              <td class="col-value col-mono">57,902.36</td>
+            </tr>
+
+            <tr class="gewst-section-head">
+              <td colspan="2">II. §8 GewStG — Hinzurechnungen</td>
+            </tr>
+            <tr class="gewst-row-open">
+              <td class="col-label">Entgelte für Schulden (100%)</td>
+              <td class="col-value col-mono cell-autofill" id="cellEntgelte">
+                <span class="cell-value-group">
+                  <span class="cell-override-icon" aria-label="Manuell geändert"><span class="ms">warning</span></span>
+                  <button type="button" class="open-badge" onclick="openSidePanel(this)">Open</button>
+                  <span contenteditable="true" data-autofill-value="161.10" onblur="markCellEdited(this)">161.10</span>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="col-label">Miete/Leasing bewegliche WG (20%)</td>
+              <td class="col-value col-mono cell-autofill">6,596.52</td>
+            </tr>
+            <tr>
+              <td class="col-label">Miete/Leasing unbewegliche WG (50%)</td>
+              <td class="col-value col-mono cell-autofill">23,115.97</td>
+            </tr>
+            <tr>
+              <td class="col-label">Aufwendungen für Lizenzen (25%)</td>
+              <td class="col-value col-mono cell-autofill">8,632.23</td>
+            </tr>
+            <tr>
+              <td class="col-label">Summe der Hinzurechnungen (gewichtet)</td>
+              <td class="col-value col-mono">15,196.45</td>
+            </tr>
+            <tr>
+              <td class="col-label">Hinzurechnungsbetrag (25% nach Freibetrag)</td>
+              <td class="col-value col-mono cell-autofill">3,799.11</td>
+            </tr>
+            <tr class="gewst-section-total">
+              <td class="col-label">Total:</td>
+              <td class="col-value col-mono">3,799.11</td>
+            </tr>
+
+            <tr class="gewst-section-head">
+              <td colspan="2">III. §9 GewStG — Kürzungen</td>
+            </tr>
+            <tr>
+              <td class="col-label">Einheitswert des Grundbesitzes</td>
+              <td class="col-value col-mono cell-autofill">0.00</td>
+            </tr>
+            <tr>
+              <td class="col-label">Kürzung Grundbesitz (1,2%)</td>
+              <td class="col-value col-mono cell-autofill">0.00</td>
+            </tr>
+            <tr>
+              <td class="col-label">Kürzung Gewinnanteile</td>
+              <td class="col-value col-mono cell-autofill">7,987.00</td>
+            </tr>
+
+            <tr class="gewst-section-total">
+              <td class="col-label">Total:</td>
+              <td class="col-value col-mono">7,987.00</td>
+            </tr>
+            <tr class="gewst-summary">
+              <td class="col-label">Gewerbeertrag (I + II − III)</td>
+              <td class="col-value col-mono">53,714.47</td>
+            </tr>
+            <tr class="gewst-summary">
+              <td class="col-label">Gewerbeertrag</td>
+              <td class="col-value col-mono">53,714.47</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="wizard-footer">
+      <a href="05_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
+      <a href="03_berechnung.html" class="btn btn-primary">Speichern und Weiter</a>
+    </div>
+  </div>
+</div>
+
+<div class="side-panel" id="sidePanel">
+  <div class="side-panel-header">
+    Zellendetails
+    <button type="button" class="side-panel-close" onclick="closeSidePanel()" aria-label="Schließen">×</button>
+  </div>
+  <div class="side-panel-body">
+    <div class="side-panel-sync-banner is-synced" id="sidePanelBannerSynced">
+      <span class="ms">info</span>
+      Zelle mit Buchhaltung synchronisiert.
+    </div>
+    <div class="side-panel-sync-banner is-unsynced hidden" id="sidePanelBannerUnsynced">
+      <span class="ms">warning</span>
+      Nicht mehr mit der Buchhaltung synchronisiert. Der Wert wurde manuell geändert.
+    </div>
+
+    <div class="side-panel-value-card">
+      <div class="side-panel-value-label">Entgelte für Schulden (100%)</div>
+      <div class="side-panel-value-amount" id="sidePanelValueAmount">161,10 €</div>
+    </div>
+
+    <div class="side-panel-section">
+      <div class="side-panel-section-head">
+        <div class="side-panel-section-head-left">
+          Berechnungsformel
+          <span class="ms">expand_more</span>
+        </div>
+        <a href="#" class="side-panel-glossary" onclick="return false;">
+          Glossar
+          <span class="ms" style="font-size:14px;">help_outline</span>
+        </a>
+      </div>
+      <span class="side-panel-formula-pill">100</span>
+    </div>
+
+    <div class="side-panel-section">
+      <div class="side-panel-section-head">
+        <div class="side-panel-section-head-left">
+          Konten und Buchungen
+          <span class="ms">expand_more</span>
+        </div>
+      </div>
+      <table class="side-panel-entries-table">
+        <thead>
+          <tr>
+            <th>Quelle</th>
+            <th>Bezeichnung</th>
+            <th class="col-num">Soll €</th>
+            <th class="col-num">Haben €</th>
+            <th class="col-num">Saldo €</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="#" class="source-link" onclick="return false;">› 2120</a></td>
+            <td>Zinsaufwendungen Bank</td>
+            <td class="col-num">0,00</td>
+            <td class="col-num">98,40</td>
+            <td class="col-num balance-strong">−98,40</td>
+          </tr>
+          <tr>
+            <td><a href="#" class="source-link" onclick="return false;">› 2121</a></td>
+            <td>Zinsaufwendungen Darlehen</td>
+            <td class="col-num">0,00</td>
+            <td class="col-num">62,70</td>
+            <td class="col-num balance-strong">−62,70</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="prototype.js"></script>
+</body>
+</html>

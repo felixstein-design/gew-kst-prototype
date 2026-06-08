@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gewerbesteuer MVP Prototype</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { background: #fafafb; }
+    .start-container { max-width: 800px; margin: 48px auto; padding: 0 20px; }
+    .start-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .start-header p { color: #6c767f; font-size: 14px; }
+    .cta-start { display: flex; align-items: center; justify-content: center; padding: 24px; gap: 12px; flex-wrap: wrap; }
+    .flow-note { background: #f4faf9; border: 1px solid #b3ded7; border-radius: 6px; padding: 14px 16px; font-size: 13px; color: #0f5757; margin-bottom: 24px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+<div class="start-container">
+
+  <div class="start-header" style="margin-bottom:24px;">
+    <h1>Gewerbesteuer — MVP Prototype</h1>
+    <p>5 FigJam screens · 4 wizard steps · testing notes in behaviors.md only</p>
+  </div>
+
+  <div class="flow-note">
+    <strong>FigJam flow:</strong><br>
+    Modal → <strong>Screen 2</strong> Bemessungsgrundlagen → <strong>Screen 3</strong> Berechnung → <strong>Screen 4</strong> Erklärung prüfen → <strong>Screen 5</strong> Übermittlung → <strong>Screen 1 updated</strong> Dashboard<br>
+    <strong>Wizard steps:</strong> Bemessungsgrundlagen · Berechnung · Erklärung prüfen · Übermittlung
+  </div>
+
+  <div class="interactivity-note">
+    <strong>Interactive elements:</strong>
+    <ul>
+      <li><strong>Modal</strong> — disabled Stichtag; duplicate warning on populated dashboard</li>
+      <li><strong>Screen 2</strong> — §7/§8/§9 table; Open on Entgelte für Schulden</li>
+      <li><strong>Screen 3</strong> — Hebesatztabelle link on Hebesatz row; check Generate TradeTax Entry for bookings</li>
+      <li><strong>Screen 4</strong> — Full-page PDF viewer (GewSt 1 A); export and print</li>
+      <li><strong>Finish later</strong> — → Dashboard In Bearbeitung</li>
+      <li><strong>Screen 5</strong> — Übermittlung radio cards · Speichern / Senden</li>
+    </ul>
+  </div>
+
+  <div class="overview-grid">
+    <a href="01_dashboard-empty.html" class="screen-card">
+      <div class="screen-num">Screen 1</div>
+      <div class="screen-title">Dashboard — leer</div>
+      <div class="text-small text-muted">Empty state · Modal mit deaktiviertem Stichtag</div>
+    </a>
+    <a href="02_bemessungsgrundlagen.html" class="screen-card">
+      <div class="screen-num">Screen 2</div>
+      <div class="screen-title">Bemessungsgrundlagen + Sidepanel</div>
+      <div class="text-small text-muted">Wizard Schritt 1 · Table.png</div>
+    </a>
+    <a href="03_berechnung.html" class="screen-card">
+      <div class="screen-num">Screen 3</div>
+      <div class="screen-title">Berechnung</div>
+      <div class="text-small text-muted">Wizard Schritt 2 · berechnung.png</div>
+    </a>
+    <a href="04_erklaerung_pruefen.html" class="screen-card">
+      <div class="screen-num">Screen 4</div>
+      <div class="screen-title">Erklärung prüfen</div>
+      <div class="text-small text-muted">Wizard Schritt 3 · GewSt 1 A PDF viewer</div>
+    </a>
+    <a href="05_uebermittlung.html" class="screen-card">
+      <div class="screen-num">Screen 5</div>
+      <div class="screen-title">Übermittlung</div>
+      <div class="text-small text-muted">Wizard Schritt 4 · transmission.png</div>
+    </a>
+    <a href="05_dashboard-in-progress.html" class="screen-card">
+      <div class="screen-num">Screen 1 updated</div>
+      <div class="screen-title">Dashboard — In Bearbeitung</div>
+      <div class="text-small text-muted">Finish later · Fortsetzen · duplicate modal</div>
+    </a>
+    <a href="06_dashboard-saved.html" class="screen-card">
+      <div class="screen-num">Screen 1 updated</div>
+      <div class="screen-title">Dashboard — Gespeichert</div>
+      <div class="text-small text-muted">After Speichern · Ansehen → Screen 4</div>
+    </a>
+    <a href="07_dashboard-eingereicht.html" class="screen-card">
+      <div class="screen-num">Screen 1 updated</div>
+      <div class="screen-title">Dashboard — Eingereicht</div>
+      <div class="text-small text-muted">After Senden · Sofort einreichen</div>
+    </a>
+  </div>
+
+  <div class="cta-start">
+    <a href="01_dashboard-empty.html" class="btn btn-primary btn-lg">▶ Prototype starten</a>
+    <span class="text-small text-muted">Speichern → 06 · Senden → 07</span>
+  </div>
+
+  <p class="text-small text-muted" style="margin-top:24px;">
+    Behavior spec: <a href="../behaviors.md" style="color:#006666;">behaviors.md</a>
+  </p>
+
+</div>
+</body>
+</html>

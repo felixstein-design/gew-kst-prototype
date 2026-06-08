@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen 1 — Dashboard (Gespeichert)</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><div class="sidebar-logo-mark">P</div></div>
+    <div class="sidebar-roles">
+      <button class="role-btn active">Steuer­berater</button>
+      <button class="role-btn muted">Mandant</button>
+    </div>
+    <nav class="nav-main">
+      <a href="#" class="nav-item"><span class="ms">receipt_long</span>Buchführung</a>
+      <a href="#" class="nav-item"><span class="ms">assessment</span>Jahres­abschlüsse</a>
+      <a href="#" class="nav-item active"><span class="ms">account_balance</span>Besteuerung</a>
+      <a href="#" class="nav-item"><span class="ms">bar_chart</span>Auswertungen</a>
+      <a href="#" class="nav-item"><span class="ms">folder</span>Stammdaten</a>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <div class="page-titlebar">
+      <div>
+        <h1>Gewerbesteuer-Erklärungen</h1>
+        <div class="page-titlebar-meta">Mandant: Hausmann &amp; Partner GmbH</div>
+      </div>
+      <div class="page-controls">
+        <button class="btn btn-primary" onclick="openModal('duplicateModal')">Gewerbesteuererklärung erstellen</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Zeitraum</th>
+              <th>Erstellt von</th>
+              <th>Status</th>
+              <th>Zuletzt geändert</th>
+              <th class="col-right">Gewerbeertrag (€)</th>
+              <th class="col-right">Steuermessbetrag (€)</th>
+              <th class="col-right">Gewerbesteuer (€)</th>
+              <th>Buchungssätze</th>
+              <th>Aktionen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>01.01.2025 – 31.12.2025</td>
+              <td>
+                <span class="table-user">
+                  <span class="table-user-avatar">TW</span>
+                  Thomas Weber
+                </span>
+              </td>
+              <td><span class="badge badge-gespeichert"><span class="ms">save</span> Gespeichert</span></td>
+              <td>08.12.2025</td>
+              <td class="col-right col-mono">53.714,47</td>
+              <td class="col-right col-mono">1.879,50</td>
+              <td class="col-right col-mono" id="dashboardGewerbesteuer">—</td>
+              <td><span class="journal-pill">31/12/2025</span></td>
+              <td>
+                <div class="table-actions">
+                  <button type="button" class="table-action-btn is-danger" aria-label="Löschen"><span class="ms">delete</span></button>
+                  <a href="05_uebermittlung.html" class="table-action-btn is-success" aria-label="Einreichen"><span class="ms">send</span></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="duplicateModal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-title">Gewerbesteuererklärung erstellen</div>
+    <div class="modal-subtitle">Wählen Sie den Stichtag für die Erklärung.</div>
+    <div class="form-field">
+      <label class="form-label">Stichtag</label>
+      <div class="form-input-with-icon">
+        <input type="text" class="form-input" value="31.03.2025" disabled>
+        <span class="ms input-icon">calendar_today</span>
+      </div>
+      <div class="field-warning">
+        <span class="ms filled">error</span>
+        <span>Für diesen Stichtag existiert bereits eine Erklärung. Bitte bearbeiten Sie die bestehende Erklärung.</span>
+      </div>
+    </div>
+    <div class="modal-actions" style="justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeModal('duplicateModal')">Abbrechen</button>
+      <a href="05_uebermittlung.html" class="btn btn-primary">Bestehende Erklärung bearbeiten</a>
+    </div>
+  </div>
+</div>
+
+<script src="prototype.js"></script>
+</body>
+</html>
