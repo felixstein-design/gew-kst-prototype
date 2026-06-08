@@ -91,7 +91,13 @@
             <select class="entry-select" aria-label="Journal">
               <option selected>OD</option>
             </select>
-            <input type="text" class="entry-date" value="31/12/2025" disabled>
+            <div class="disabled-date-tooltip disabled-date-tooltip--compact">
+              <input type="text" class="entry-date" value="31.12.2025" disabled>
+              <div class="info-tooltip" role="tooltip">
+                <span class="ms info-tooltip-icon">info</span>
+                <p>Pro Geschäftsjahr ist derzeit nur eine Gewerbesteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+              </div>
+            </div>
             <span class="entry-label">Gewerbesteuer 2025</span>
           </div>
           <table class="entry-table">

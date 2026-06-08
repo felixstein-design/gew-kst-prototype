@@ -51,9 +51,15 @@
     <div class="modal-subtitle">Wählen Sie den Stichtag für die Erklärung.</div>
     <div class="form-field">
       <label class="form-label">Stichtag</label>
-      <div class="form-input-with-icon">
-        <input type="text" class="form-input" value="31.03.2025" disabled>
-        <span class="ms input-icon">calendar_today</span>
+      <div class="disabled-date-tooltip">
+        <div class="form-input-with-icon">
+          <input type="text" class="form-input" value="31.12.2025" disabled>
+          <span class="ms input-icon">calendar_today</span>
+        </div>
+        <div class="info-tooltip" role="tooltip">
+          <span class="ms info-tooltip-icon">info</span>
+          <p>Pro Geschäftsjahr ist derzeit nur eine Gewerbesteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+        </div>
       </div>
     </div>
     <div class="modal-actions" style="justify-content:flex-end;">

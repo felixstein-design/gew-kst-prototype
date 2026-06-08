@@ -43,10 +43,16 @@
     <div class="main">
 
       <div class="calc-date-row">
-        <label class="form-label">Calculation date</label>
-        <div class="form-input-with-icon" style="flex:1;">
-          <input type="text" class="form-input" value="31/12/2025" disabled>
-          <span class="ms input-icon">calendar_today</span>
+        <label class="form-label">Stichtag</label>
+        <div class="disabled-date-tooltip" style="flex:1;">
+          <div class="form-input-with-icon">
+            <input type="text" class="form-input" value="31.12.2025" disabled>
+            <span class="ms input-icon">calendar_today</span>
+          </div>
+          <div class="info-tooltip" role="tooltip">
+            <span class="ms info-tooltip-icon">info</span>
+            <p>Pro Geschäftsjahr ist derzeit nur eine Gewerbesteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+          </div>
         </div>
       </div>
 
