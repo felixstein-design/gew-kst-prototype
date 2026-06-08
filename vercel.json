@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/MVP/index.html" }
+    { "source": "/", "destination": "/MVP/index.html" },
+    { "source": "/:file(.*\\.html)", "destination": "/MVP/:file" }
   ],
   "headers": [
     {
