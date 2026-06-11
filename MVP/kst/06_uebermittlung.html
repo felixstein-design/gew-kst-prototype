@@ -49,7 +49,7 @@
           <div class="toggle">
             <div class="toggle-switch"></div>
             Festschreiben
-            <span class="text-muted transmission-info-icon" title="Buchungen werden beim Absenden festgeschrieben.">ⓘ</span>
+            <span class="text-muted transmission-info-icon" title="Die Erklärung wird nach dem Absenden endgültig festgeschrieben und kann nicht mehr bearbeitet werden. Steuerbuchungen werden in Schritt 3 übernommen.">ⓘ</span>
           </div>
         </div>
 
@@ -84,9 +84,19 @@
             </thead>
             <tbody>
               <tr>
-                <td>Steuerschuld</td>
+                <td>Festgesetzte Steuerlast (KSt + Soli)</td>
                 <td>Gesamt</td>
-                <td class="col-right col-mono"><strong id="steuerschuldValue">452,12 €</strong></td>
+                <td class="col-right col-mono" id="transmissionFestsetzungValue">452,12 €</td>
+              </tr>
+              <tr>
+                <td>Vorauszahlungen KöSt (Konto 1730)</td>
+                <td>Gesamt</td>
+                <td class="col-right col-mono" id="transmissionVorauszahlungenValue">− 300,00 €</td>
+              </tr>
+              <tr>
+                <td>Verbleibende Steuerschuld</td>
+                <td>Gesamt</td>
+                <td class="col-right col-mono"><strong id="steuerschuldValue">135,62 €</strong></td>
               </tr>
             </tbody>
           </table>
@@ -97,7 +107,7 @@
         <div class="transmission-export">
           <div class="transmission-section-title">Formular exportieren</div>
           <p class="text-small text-muted" style="margin:8px 0 16px;">
-            Laden Sie die ausgefüllte KSt 1 A als PDF herunter, um sie an Ihren Mandanten weiterzuleiten — z.&nbsp;B. per E-Mail oder in Ihrem Dokumentenmanagement.
+            Laden Sie die ausgefüllte KSt 1 als PDF herunter, um sie an Ihren Mandanten weiterzuleiten — z.&nbsp;B. per E-Mail oder in Ihrem Dokumentenmanagement.
           </p>
           <button type="button" class="btn btn-secondary" id="downloadFormBtn" onclick="downloadKstFormFromTransmission()">
             <span class="ms" style="font-size:18px; vertical-align:-3px;">download</span>

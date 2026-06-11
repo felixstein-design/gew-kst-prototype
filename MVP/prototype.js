@@ -71,14 +71,18 @@ function toggleBookingEntry() {
   if (!cb || !block) return;
   block.classList.toggle('hidden', !cb.checked);
   if (cb.checked) {
-    var amount =
-      typeof recalcGewerbesteuer === 'function'
-        ? recalcGewerbesteuer()
-        : document.getElementById('gewstRueckstellungValue')
-          ? getGewstRueckstellungAmount()
-          : getGewerbesteuerAmount();
+    if (document.getElementById('kstBookingKstSoll') && typeof recalcKstTax === 'function') {
+      recalcKstTax(true);
+    } else if (typeof recalcGewerbesteuer === 'function') {
+      recalcGewerbesteuer();
+    }
     var preview = document.getElementById('buchungGewerbesteuerPreview');
-    if (preview) preview.textContent = formatAmountDotted(amount) + ' €';
+    if (preview) {
+      var amount = document.getElementById('gewstRueckstellungValue')
+        ? getGewstRueckstellungAmount()
+        : getGewerbesteuerAmount();
+      preview.textContent = formatAmountDotted(amount) + ' €';
+    }
   }
 }
 function showBookingPreview() {
@@ -221,9 +225,21 @@ function initBerechnungPage() {
 function initTransmissionPage() {
   var isKst = document.body && document.body.dataset.flow === 'kst';
   if (isKst) {
+    var festsetzungEl = document.getElementById('transmissionFestsetzungValue');
+    var vorauszahlungenEl = document.getElementById('transmissionVorauszahlungenValue');
     var steuerschuldEl = document.getElementById('steuerschuldValue');
-    if (!steuerschuldEl) return;
-    steuerschuldEl.textContent = formatAmountDotted(getKstTaxTotal()) + ' €';
+    if (festsetzungEl && vorauszahlungenEl && steuerschuldEl) {
+      var gross = getKstGrossTotal();
+      var prepayment = KST_VORAUSZAHLUNGEN_1730;
+      var net = getKstTaxTotal();
+      festsetzungEl.textContent = formatAmountDotted(gross) + ' €';
+      vorauszahlungenEl.textContent = '− ' + formatAmountDotted(prepayment) + ' €';
+      steuerschuldEl.textContent = formatAmountDotted(net) + ' €';
+      return;
+    }
+    if (steuerschuldEl) {
+      steuerschuldEl.textContent = formatAmountDotted(getKstTaxTotal()) + ' €';
+    }
     return;
   }
 
@@ -507,77 +523,160 @@ function initDashboardPage() {
 /* ── KSt flow ─────────────────────────────────────────────── */
 var KST_TAXABLE_INCOME = 2856.97;
 var KST_DEFAULT_RATE = 15;
-var KST_STORAGE_KEY = 'kstMvpTaxTotal';
+var KST_VORAUSZAHLUNGEN_1730 = 300;
+var KST_EXISTING_RUECKSTELLUNG_0963 = 80;
+var KST_EXISTING_RUECKSTELLUNG_0955 = 4.4;
+var KST_STORAGE_KEY = 'kstMvpNetTotal';
+var KST_GROSS_TOTAL_KEY = 'kstMvpGrossTotal';
+var KST_NET_KST_KEY = 'kstMvpNetKst';
+
+function getKstRate() {
+  var rateInput = document.getElementById('kstRateInput');
+  if (rateInput) return parseGermanAmount(String(rateInput.value).replace('%', ''));
+  return KST_DEFAULT_RATE;
+}
+
+function computeKstTaxBreakdown(rate) {
+  if (rate == null) rate = KST_DEFAULT_RATE;
+  var kstGross = KST_TAXABLE_INCOME * rate / 100;
+  var prepayment = KST_VORAUSZAHLUNGEN_1730;
+  var netKst = Math.max(0, kstGross - prepayment);
+  var netSoli = netKst * 0.055;
+  var grossSoli = kstGross * 0.055;
+  return {
+    kstGross: kstGross,
+    prepayment: prepayment,
+    netKst: netKst,
+    netSoli: netSoli,
+    grossSoli: grossSoli,
+    grossTotal: kstGross + grossSoli,
+    netTotal: netKst + netSoli
+  };
+}
+
+function isKstProvisionInBooks() {
+  var sw = document.getElementById('kstProvisionSwitch');
+  return !!(sw && sw.checked);
+}
+
+function computeKstBookingDeltas(breakdown, provisionInBooks) {
+  var deltaKst = breakdown.netKst;
+  var deltaSoli = breakdown.netSoli;
+  if (provisionInBooks) {
+    deltaKst = Math.max(0, breakdown.netKst - KST_EXISTING_RUECKSTELLUNG_0963);
+    deltaSoli = Math.max(0, breakdown.netSoli - KST_EXISTING_RUECKSTELLUNG_0955);
+  }
+  return {
+    deltaKst: deltaKst,
+    deltaSoli: deltaSoli,
+    deltaTotal: deltaKst + deltaSoli
+  };
+}
+
+function persistKstTax(breakdown) {
+  sessionStorage.setItem(KST_STORAGE_KEY, String(breakdown.netTotal));
+  sessionStorage.setItem(KST_GROSS_TOTAL_KEY, String(breakdown.grossTotal));
+  sessionStorage.setItem(KST_NET_KST_KEY, String(breakdown.netKst));
+}
 
 function getKstTaxTotal() {
   var stored = sessionStorage.getItem(KST_STORAGE_KEY);
   if (stored != null && stored !== '') return parseFloat(stored) || 0;
-  var input = document.getElementById('kstRateInput');
-  if (input) return recalcKstTax(false);
-  return KST_TAXABLE_INCOME * KST_DEFAULT_RATE / 100 * 1.055;
+  return computeKstTaxBreakdown(KST_DEFAULT_RATE).netTotal;
+}
+
+function getKstGrossTotal() {
+  var stored = sessionStorage.getItem(KST_GROSS_TOTAL_KEY);
+  if (stored != null && stored !== '') return parseFloat(stored) || 0;
+  return computeKstTaxBreakdown(getKstRate()).grossTotal;
+}
+
+function setKstAmountText(id, amount) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = formatAmountSpaced(amount);
+}
+
+function updateKstBerechnungDom(b) {
+  setKstAmountText('kstAmountValue', b.kstGross);
+  setKstAmountText('kstVorauszahlungenValue', b.prepayment);
+  setKstAmountText('kstNetKstValue', b.netKst);
+  setKstAmountText('kstSoliValue', b.netSoli);
+  setKstAmountText('kstNetTotalValue', b.netTotal);
+  setKstAmountText('kstRateTaxValue', b.kstGross);
+}
+
+function updateKstBookingDom(b, deltas) {
+  setKstAmountText('kstDeltaKstValue', deltas.deltaKst);
+  setKstAmountText('kstDeltaSoliValue', deltas.deltaSoli);
+  setKstAmountText('kstBookingKstSoll', deltas.deltaKst);
+  setKstAmountText('kstBookingKstHaben', deltas.deltaKst);
+  setKstAmountText('kstBookingSoliSoll', deltas.deltaSoli);
+  setKstAmountText('kstBookingSoliHaben', deltas.deltaSoli);
+
+  var expenseTotal = deltas.deltaKst + deltas.deltaSoli;
+  setKstAmountText('kstBookingExpenseTotal', expenseTotal);
+  setKstAmountText('kstBookingLiabilityTotal', expenseTotal);
+
+  var preview = document.getElementById('kstBookingPreview');
+  if (preview) preview.textContent = formatAmountDotted(deltas.deltaTotal) + ' €';
+
+  var netKstEl = document.getElementById('kstBookingNetKstPreview');
+  if (netKstEl) netKstEl.textContent = formatAmountDotted(b.netKst) + ' €';
 }
 
 function recalcKstTax(persist) {
   if (persist == null) persist = true;
-  var rateInput = document.getElementById('kstRateInput');
-  var kstEl = document.getElementById('kstAmountValue');
-  var soliEl = document.getElementById('kstSoliValue');
-  var totalEl = document.getElementById('kstTotalTaxValue');
-  var rate = rateInput ? parseGermanAmount(String(rateInput.value).replace('%', '')) : KST_DEFAULT_RATE;
-  var kst = KST_TAXABLE_INCOME * rate / 100;
-  var soli = kst * 0.055;
-  var total = kst + soli;
+  var breakdown = computeKstTaxBreakdown(getKstRate());
+  var deltas = computeKstBookingDeltas(breakdown, isKstProvisionInBooks());
 
-  if (kstEl) kstEl.textContent = formatAmountSpaced(kst);
-  if (soliEl) soliEl.textContent = formatAmountSpaced(soli);
-  if (totalEl) totalEl.textContent = formatAmountSpaced(total);
+  updateKstBerechnungDom(breakdown);
+  updateKstBookingDom(breakdown, deltas);
 
-  var rateTaxEl = document.getElementById('kstRateTaxValue');
-  if (rateTaxEl) rateTaxEl.textContent = formatAmountSpaced(kst);
-
-  var amountDotted = formatAmountDotted(total);
-  ['kstBookingExpenseSoll', 'kstBookingExpenseTotal', 'kstBookingLiabilityHaben', 'kstBookingLiabilityTotal'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = amountDotted;
-  });
-
-  if (persist) sessionStorage.setItem(KST_STORAGE_KEY, String(total));
-  return total;
+  if (persist) persistKstTax(breakdown);
+  return breakdown.netTotal;
 }
 
 function initKstBuchungssaetzePage() {
   var input = document.getElementById('kstRateInput');
   if (!input) return;
-  input.addEventListener('input', function() { recalcKstTax(true); });
-  input.addEventListener('blur', function() { recalcKstTax(true); });
+  input.addEventListener('input', function() {
+    recalcKstTax(true);
+  });
+  input.addEventListener('blur', function() {
+    recalcKstTax(true);
+  });
+
+  var sw = document.getElementById('kstProvisionSwitch');
+  var existingBlock = document.getElementById('kstExistingProvisionBlock');
+  if (sw) {
+    sw.addEventListener('change', function() {
+      if (existingBlock) existingBlock.classList.toggle('hidden', !sw.checked);
+      recalcKstTax(true);
+    });
+    if (existingBlock) existingBlock.classList.toggle('hidden', !sw.checked);
+  }
+
   recalcKstTax(true);
 }
 
 function initKstBerechnungPage() {
   if (document.getElementById('kstRateInput')) return;
-  var kstEl = document.getElementById('kstAmountValue');
-  if (!kstEl || !document.getElementById('kstTotalTaxValue')) return;
-  var total = getKstTaxTotal();
-  var kst = total / 1.055;
-  var soli = total - kst;
-  kstEl.textContent = formatAmountSpaced(kst);
-  var soliEl = document.getElementById('kstSoliValue');
-  if (soliEl) soliEl.textContent = formatAmountSpaced(soli);
-  var totalEl = document.getElementById('kstTotalTaxValue');
-  if (totalEl) totalEl.textContent = formatAmountSpaced(total);
+  if (!document.getElementById('kstNetTotalValue')) return;
+  recalcKstTax(true);
 }
 
 function initKstDashboardPage() {
   var kstEl = document.getElementById('dashboardKstAmount');
   if (!kstEl) return;
-  var total = getKstTaxTotal();
-  var kstOnly = total / 1.055;
-  var soli = total - kstOnly;
-  kstEl.textContent = formatAmountDotted(kstOnly);
+  var breakdown = computeKstTaxBreakdown(KST_DEFAULT_RATE);
+  kstEl.textContent = formatAmountDotted(breakdown.kstGross);
   var soliEl = document.getElementById('dashboardKstSoli');
-  if (soliEl) soliEl.textContent = formatAmountDotted(soli);
+  if (soliEl) soliEl.textContent = formatAmountDotted(breakdown.netSoli);
   var entriesEl = document.getElementById('dashboardKstEntries');
-  if (entriesEl) entriesEl.textContent = total > 0 ? formatAmountDotted(total) : '—';
+  if (entriesEl) {
+    var deltas = computeKstBookingDeltas(breakdown, true);
+    entriesEl.textContent = formatAmountDotted(deltas.deltaTotal);
+  }
 }
 
 function initKstFormPreview() {

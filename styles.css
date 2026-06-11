@@ -710,6 +710,31 @@ body {
   border-radius: 50%;
   top: 3px; right: 3px;
 }
+.toggle--interactive {
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.toggle--interactive input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+.toggle--interactive .toggle-switch {
+  background: #c4c9ce;
+}
+.toggle--interactive .toggle-switch::after {
+  left: 3px;
+  right: auto;
+}
+.toggle--interactive input:checked + .toggle-switch {
+  background: #006666;
+}
+.toggle--interactive input:checked + .toggle-switch::after {
+  left: auto;
+  right: 3px;
+}
 
 /* ── Radio card ───────────────────────────────────────────── */
 .radio-card {
@@ -2100,6 +2125,14 @@ body {
   color: #006666;
   border-left-color: #006666;
 }
+.declaration-tab--available {
+  cursor: pointer;
+}
+.declaration-tab--available:hover,
+.declaration-tab--available:focus {
+  background: #f4f5f6;
+  outline: none;
+}
 .declaration-tab.is-disabled {
   color: #9aa0a6;
   cursor: not-allowed;
@@ -2604,4 +2637,100 @@ body {
   margin-left: 8px;
   font-size: 12px;
   font-weight: 500;
+}
+
+/* KSt Berechnung prepayments (Step 2) */
+.berechnung-section-head td {
+  padding-top: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #39434c;
+  background: #fffbeb;
+  border-top: 1px solid #fde68a;
+}
+.berechnung-hint td {
+  padding: 6px 0 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #6c767f;
+  font-style: italic;
+}
+.berechnung-row--deduction .col-label::before {
+  content: '− ';
+  color: #b45309;
+}
+.berechnung-row--deduction .col-value {
+  color: #b45309;
+}
+.berechnung-row--subtotal .col-label,
+.berechnung-row--total .col-label {
+  font-weight: 600;
+}
+.berechnung-row--total td {
+  border-top: 1px solid #e4e5e7;
+}
+
+/* KSt Buchungssätze (Step 3) */
+.kst-provision-switch {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px solid #e4e5e7;
+  border-radius: 8px;
+}
+.kst-provision-toggle-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.kst-provision-switch-text {
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #141a1f;
+  cursor: pointer;
+}
+.kst-provision-switch-hint {
+  margin: 8px 0 0;
+}
+.kst-delta-summary {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+}
+.kst-delta-summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+  color: #39434c;
+  padding: 4px 0;
+}
+.kst-delta-summary-row--emphasis {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+.kst-booking-actions {
+  margin-top: 16px;
+}
+.kst-booking-confirmed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #166534;
+}
+.kst-booking-confirmed .ms {
+  color: #059669;
+  font-size: 18px;
 }

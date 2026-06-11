@@ -3,6 +3,20 @@ var KST_REVIEW_WARNING_TEXT =
 
 var STAMMDATEN_SECTION_IDS = ['allgemein', 'unternehmen'];
 
+var KST_DECLARATION_TABS = [
+  { id: 'kst1', label: 'KSt 1', available: true },
+  { id: 'zve', label: 'Anlage ZVE', available: true },
+  { id: 'wa', label: 'Anlage WA', available: true },
+  { id: 'verluste', label: 'Anlage Verluste', available: true },
+  { id: 'kst1f', label: 'Anlage KSt 1 F', available: true },
+  { id: 'gk', label: 'Anlage GK', available: true },
+  { id: 'zwig', label: 'Anlage ZwiG', available: false },
+  { id: 'zinsschranke', label: 'Anlage Zinsschranke', available: false },
+  { id: 'wifoe', label: 'Anlage WiFö', available: false },
+  { id: 'steuergestaltung', label: 'Anlage Steuergestaltung', available: false },
+  { id: 'spifa', label: 'Anlage SPIFA', available: false }
+];
+
 var KST_FORM_SECTIONS = [
   {
     id: 'allgemein',
@@ -407,7 +421,7 @@ function renderKstDeclarationForm(container, options) {
     '<div class="taxform-sheet-header">' +
     '<div class="taxform-sheet-header-main">' +
     '<h2 class="taxform-period">Geschäftsjahr 2025</h2>' +
-    '<span class="taxform-form-id">KSt 1 A · Körperschaftsteuererklärung</span>' +
+    '<span class="taxform-form-id">KSt 1 · Körperschaftsteuererklärung</span>' +
     '</div>' +
     '<span class="taxform-saved"><span class="ms">cloud_done</span> Gespeichert</span>' +
     '</div>';
@@ -472,7 +486,38 @@ function markManualAmountEdited(input) {
   }
 }
 
+function renderKstDeclarationTabsHtml(activeTabId) {
+  activeTabId = activeTabId || 'kst1';
+  return KST_DECLARATION_TABS.map(function(tab) {
+    if (!tab.available) {
+      return (
+        '<span class="declaration-tab is-disabled" tabindex="0">' +
+        escapeHtml(tab.label) +
+        '<span class="declaration-tab-tooltip" role="tooltip">Noch nicht verfügbar</span></span>'
+      );
+    }
+    if (tab.id === activeTabId) {
+      return (
+        '<span class="declaration-tab is-active" aria-current="page">' +
+        escapeHtml(tab.label) +
+        '</span>'
+      );
+    }
+    return (
+      '<span class="declaration-tab declaration-tab--available" role="tab" tabindex="0">' +
+      escapeHtml(tab.label) +
+      '</span>'
+    );
+  }).join('');
+}
+
 function initKstFormPage() {
+  var tabsMount = document.getElementById('kstDeclarationTabsMount');
+  if (tabsMount) {
+    var activeTab = document.body.dataset.kstActiveTab || 'kst1';
+    tabsMount.innerHTML = renderKstDeclarationTabsHtml(activeTab);
+  }
+
   var mount = document.getElementById('kstFormMount');
   if (!mount) return;
 

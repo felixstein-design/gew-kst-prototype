@@ -100,13 +100,50 @@
         </table>
       </div>
 
+      <div class="section-title">Steuerbuchungen</div>
+
+      <div class="kst-provision-switch">
+        <div class="kst-provision-toggle-row">
+          <label class="kst-provision-switch-text" for="kstProvisionSwitch">
+            Körperschaftsteuer- und Solidaritätszuschlag-Rückstellungen sind in der Buchführung bereits berücksichtigt
+          </label>
+          <label class="toggle toggle--interactive">
+            <input type="checkbox" id="kstProvisionSwitch">
+            <span class="toggle-switch" aria-hidden="true"></span>
+          </label>
+        </div>
+        <p class="text-small text-muted kst-provision-switch-hint">
+          Entspricht dem DATEV-Schalter: bestehende Rückstellungen (0963 / 0955) werden abgezogen — es wird nur das Delta gebucht.
+        </p>
+      </div>
+
+      <div class="kst-delta-summary hidden" id="kstExistingProvisionBlock">
+        <div class="kst-delta-summary-row">
+          <span>Bestehende Rückstellung Konto 0963</span>
+          <span class="col-mono">80,00 €</span>
+        </div>
+        <div class="kst-delta-summary-row">
+          <span>Bestehende Rückstellung Konto 0955</span>
+          <span class="col-mono">4,40 €</span>
+        </div>
+        <div class="kst-delta-summary-row kst-delta-summary-row--emphasis">
+          <span>Zu buchendes Delta KöSt / SolZ</span>
+          <span class="col-mono"><strong id="kstDeltaKstValue">48,55</strong> / <strong id="kstDeltaSoliValue">2,67</strong> €</span>
+        </div>
+      </div>
+
       <div class="entry-section">
         <label class="entry-checkbox">
           <input type="checkbox" id="generateEntry" onchange="toggleBookingEntry()">
-          Buchungssatz für Körperschaftsteuer erzeugen
+          Buchungssatz generieren
         </label>
 
         <div class="entry-block hidden" id="entryBlock">
+          <p class="text-small text-muted" style="margin:16px 0 8px;">
+            Netto-KöSt-Rückstellung: <strong id="kstBookingNetKstPreview">128,55 €</strong>
+            · Buchungssatz gesamt: <strong id="kstBookingPreview">135,62 €</strong>
+          </p>
+
           <div class="entry-header">
             <select class="entry-select" aria-label="Journal">
               <option selected>OD</option>
@@ -130,21 +167,21 @@
             </thead>
             <tbody>
               <tr>
-                <td>2200 — Körperschaftsteuer</td>
-                <td class="col-right col-mono" id="kstBookingExpenseSoll">452,12</td>
-                <td class="col-right col-mono">0,00</td>
+                <td>2200 — Körperschaftsteuer / 0963 — KöSt-Rückstellung</td>
+                <td class="col-right col-mono" id="kstBookingKstSoll">48,55</td>
+                <td class="col-right col-mono" id="kstBookingKstHaben">48,55</td>
               </tr>
               <tr>
-                <td>1776 — Körperschaftsteuer-Verbindlichkeit</td>
-                <td class="col-right col-mono">0,00</td>
-                <td class="col-right col-mono" id="kstBookingLiabilityHaben">452,12</td>
+                <td>2208 — Solidaritätszuschlag / 0955 — Steuerrückstellungen</td>
+                <td class="col-right col-mono" id="kstBookingSoliSoll">2,67</td>
+                <td class="col-right col-mono" id="kstBookingSoliHaben">2,67</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
                 <td><strong>Summe</strong></td>
-                <td class="col-right col-mono"><strong id="kstBookingExpenseTotal">452,12</strong></td>
-                <td class="col-right col-mono"><strong id="kstBookingLiabilityTotal">452,12</strong></td>
+                <td class="col-right col-mono"><strong id="kstBookingExpenseTotal">51,22</strong></td>
+                <td class="col-right col-mono"><strong id="kstBookingLiabilityTotal">51,22</strong></td>
               </tr>
             </tfoot>
           </table>

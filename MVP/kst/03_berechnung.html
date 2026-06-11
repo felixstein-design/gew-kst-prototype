@@ -78,13 +78,27 @@
               <td class="col-label">Körperschaftsteuer (15%)</td>
               <td class="col-value col-mono cell-autofill" id="kstAmountValue">428,55</td>
             </tr>
-            <tr>
-              <td class="col-label">Solidaritätszuschlag (5,5% auf KSt)</td>
-              <td class="col-value col-mono cell-autofill" id="kstSoliValue">23,57</td>
+            <tr class="berechnung-section-head">
+              <td colspan="2">Vorauszahlungen / Rückstellung</td>
             </tr>
             <tr>
-              <td class="col-label">Gesamte Steuerlast (KSt + Soli)</td>
-              <td class="col-value col-mono cell-autofill" id="kstTotalTaxValue">452,12</td>
+              <td colspan="2" class="berechnung-hint">KöSt-Vorauszahlungen aus Konto 1730 (bereits gebucht).</td>
+            </tr>
+            <tr class="berechnung-row--deduction">
+              <td class="col-label">Vorauszahlungen — Konto 1730</td>
+              <td class="col-value col-mono cell-autofill" id="kstVorauszahlungenValue">300,00</td>
+            </tr>
+            <tr class="berechnung-row--subtotal">
+              <td class="col-label"><strong>Netto-KöSt-Rückstellung</strong></td>
+              <td class="col-value col-mono cell-autofill" id="kstNetKstValue">128,55</td>
+            </tr>
+            <tr>
+              <td class="col-label">Solidaritätszuschlag (5,5% auf Netto-KSt)</td>
+              <td class="col-value col-mono cell-autofill" id="kstSoliValue">7,07</td>
+            </tr>
+            <tr class="berechnung-row--total">
+              <td class="col-label"><strong>Verbleibende Steuerlast (KSt + Soli)</strong></td>
+              <td class="col-value col-mono cell-autofill" id="kstNetTotalValue">135,62</td>
             </tr>
           </tbody>
         </table>
