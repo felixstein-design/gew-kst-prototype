@@ -1484,6 +1484,7 @@ body {
   color: #6c767f;
   cursor: not-allowed;
 }
+.form-input--year { max-width: 120px; }
 .form-input-with-icon {
   position: relative;
 }
@@ -2060,3 +2061,475 @@ body {
 .interactivity-note ul { padding-left: 16px; margin-top: 6px; line-height: 1.8; }
 
 .hidden { display: none !important; }
+
+/* GewSt form iteration — declaration frame + taxform */
+.main--declaration-step { padding: 0 24px 24px; }
+.declaration-frame {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0;
+  background: #fff;
+  border: 1px solid #e4e5e7;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 560px;
+}
+.declaration-tabs {
+  background: #fafafb;
+  border-right: 1px solid #e4e5e7;
+  padding: 8px 0;
+  overflow: visible;
+  z-index: 2;
+}
+.declaration-tab {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #39434c;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  text-align: left;
+  border-left: 3px solid transparent;
+  cursor: default;
+}
+.declaration-tab.is-active {
+  background: #ffffff;
+  color: #006666;
+  border-left-color: #006666;
+}
+.declaration-tab.is-disabled {
+  color: #9aa0a6;
+  cursor: not-allowed;
+  position: relative;
+}
+.declaration-tab.is-disabled:hover,
+.declaration-tab.is-disabled:focus {
+  background: #f4f5f6;
+  outline: none;
+}
+.declaration-tab-tooltip {
+  position: absolute;
+  left: 12px;
+  top: calc(100% + 6px);
+  z-index: 20;
+  padding: 6px 10px;
+  background: #141a1f;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.declaration-tab-tooltip::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  bottom: 100%;
+  border: 5px solid transparent;
+  border-bottom-color: #141a1f;
+}
+.declaration-tab.is-disabled:hover .declaration-tab-tooltip,
+.declaration-tab.is-disabled:focus .declaration-tab-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+.declaration-content {
+  min-width: 0;
+  background: #fff;
+  overflow: auto;
+  max-height: calc(100vh - 260px);
+}
+.taxform-container { padding: 0; }
+.taxform-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 24px;
+  border-bottom: 1px solid #e4e5e7;
+  background: #fff;
+  font-size: 12px;
+}
+.taxform-controls-label { font-weight: 600; color: #39434c; margin-right: 4px; }
+.taxform-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.taxform-badge--warning { background: #fff2e5; color: #b45309; border: 1px solid #ffd6b2; }
+.taxform-badge--info { background: #e8f0fe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.taxform-sheet-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px 12px;
+  background: #fff;
+}
+.taxform-sheet-header-main { min-width: 0; }
+.taxform-period {
+  font-size: 20px;
+  font-weight: 700;
+  color: #141a1f;
+  margin: 0 0 4px;
+  line-height: 1.2;
+}
+.taxform-form-id {
+  display: block;
+  font-size: 13px;
+  color: #6c767f;
+}
+.taxform-saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6c767f;
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+.taxform-saved .ms { font-size: 16px; color: #006666; }
+.taxform-sheet-wrap {
+  padding: 0 24px 24px;
+  overflow-x: auto;
+}
+.taxform-sheet {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.taxform-sheet th,
+.taxform-sheet td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e4e5e7;
+  font-size: 13px;
+  vertical-align: middle;
+}
+.taxform-sheet thead th {
+  background: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  color: #39434c;
+  border-bottom: 1px solid #d6d9db;
+  padding-top: 0;
+  padding-bottom: 10px;
+}
+.taxform-sheet thead .taxform-col-z,
+.taxform-sheet thead .taxform-col-kz { text-align: center; }
+.taxform-sheet thead .taxform-col-amount { text-align: right; }
+.taxform-sheet tbody tr:last-child td { border-bottom: none; }
+.taxform-col-z {
+  width: 48px;
+  text-align: center;
+  color: #9ea5ad;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  vertical-align: top;
+  padding-top: 10px;
+}
+.taxform-col-kz {
+  width: 56px;
+  text-align: center;
+  color: #9ea5ad;
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  vertical-align: top;
+  padding-top: 10px;
+}
+.taxform-col-desc {
+  color: #141a1f;
+  line-height: 1.45;
+  vertical-align: top;
+  padding-top: 10px;
+}
+.taxform-col-amount {
+  width: 160px;
+  text-align: right;
+}
+.taxform-group-head td {
+  padding-top: 20px;
+  padding-bottom: 8px;
+  border-bottom: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #141a1f;
+  background: #fff;
+}
+.taxform-group-head:first-child td { padding-top: 8px; }
+.taxform-group-sub td {
+  padding-top: 0;
+  padding-bottom: 8px;
+  border-bottom: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6c767f;
+  background: #fff;
+}
+.taxform-value {
+  text-align: right;
+  background: #fff !important;
+  vertical-align: top;
+  padding: 4px 8px;
+}
+.taxform-value--input {
+  background: #fff !important;
+}
+.taxform-value--input:has(.cell-autofill) {
+  background: #e9fbe9 !important;
+}
+.taxform-value--na {
+  background: #fff !important;
+  position: relative;
+}
+.taxform-value--na::after {
+  content: '';
+  position: absolute;
+  inset: 6px 8px;
+  background: linear-gradient(to top right, transparent calc(50% - 0.5px), #d6d9db, transparent calc(50% + 0.5px));
+  pointer-events: none;
+}
+.taxform-cell {
+  display: block;
+  min-height: 28px;
+  font-variant-numeric: tabular-nums;
+  color: #141a1f;
+  background: transparent;
+}
+.taxform-cell .cell-value-group {
+  justify-content: flex-end;
+  gap: 6px;
+}
+.taxform-field-text,
+.taxform-field-amount {
+  display: block;
+  text-align: right;
+  line-height: 28px;
+}
+.taxform-row .cell-open-btn { opacity: 1; }
+.taxform-row:hover .taxform-value--input:has(.cell-autofill) { background: #dff5df !important; }
+.taxform-row:hover .taxform-value--input:not(:has(.cell-autofill)):not(.taxform-value--na) { background: #fafafb !important; }
+.taxform-cell .cell-open-btn {
+  opacity: 1;
+  padding: 1px 6px;
+  font-size: 11px;
+  border: 1px solid #d6d9db;
+  border-radius: 4px;
+  background: #fff;
+  color: #006666;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.cell-review-warning {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  color: #dc2626;
+  flex-shrink: 0;
+  cursor: help;
+}
+.cell-review-warning .ms { font-size: 18px; }
+.cell-override-icon .ms { font-size: 16px; }
+.review-warning-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 280px;
+  padding: 10px 12px;
+  background: #141a1f;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 400;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s, visibility 0.15s;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(20, 26, 31, 0.18);
+}
+.review-warning-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 10px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #141a1f;
+}
+.review-warning-tooltip p { margin: 0; }
+.cell-review-warning:hover .review-warning-tooltip,
+.cell-review-warning:focus .review-warning-tooltip,
+.cell-review-warning:focus-within .review-warning-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+.taxform-container--review .taxform-row--review-target .taxform-value--input,
+.taxform-container--consistency-active .taxform-row--review-target .taxform-value--input {
+  box-shadow: inset 0 0 0 1px #fecaca;
+}
+.taxform-container--review .cell-override-icon { display: none !important; }
+
+/* Berechnung step — within declaration frame */
+.berechnung-panel {
+  background: #fff;
+  border: 1px solid #e4e5e7;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.berechnung-panel .taxform-entry-section {
+  padding: 0 24px 24px;
+}
+.taxform-sheet--simple {
+  min-width: 480px;
+  max-width: 640px;
+}
+.taxform-sheet--simple .taxform-col-amount {
+  width: 160px;
+}
+.taxform-manual-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-size: 13px;
+  font-family: inherit;
+  color: #141a1f;
+  padding: 0;
+  font-variant-numeric: tabular-nums;
+}
+.taxform-manual-input:focus { outline: none; }
+.taxform-manual-input--text { text-align: right; }
+.taxform-select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: inherit;
+  color: #6c767f;
+  padding: 0;
+  text-align: right;
+  cursor: not-allowed;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.taxform-select:disabled {
+  opacity: 1;
+  color: #141a1f;
+}
+.taxform-row--total .taxform-col-desc { font-weight: 600; }
+.taxform-entry-section {
+  margin-top: 28px;
+  padding-top: 8px;
+}
+.taxform-entry-section .entry-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+.taxform-entry-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-weight: 400;
+}
+.taxform-sheet--booking {
+  margin-top: 0;
+}
+.taxform-sheet--booking .taxform-col-amount {
+  width: 120px;
+}
+.taxform-sheet--booking thead .taxform-col-amount { text-align: right; }
+.taxform-sheet--booking .taxform-group-head td { padding-top: 12px; }
+.declaration-content .hebesatz-link {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #1c73ff;
+  text-decoration: none;
+  font-weight: 400;
+}
+.declaration-content .hebesatz-link:hover { text-decoration: underline; }
+.berechnung-panel .hebesatz-link {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #1c73ff;
+  text-decoration: none;
+  font-weight: 400;
+}
+.berechnung-panel .hebesatz-link:hover { text-decoration: underline; }
+.taxform-foldout-head td { padding: 0; border-bottom: none; }
+.taxform-foldout-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 12px;
+  border: none;
+  background: #fafafb;
+  font-size: 13px;
+  font-weight: 600;
+  color: #141a1f;
+  text-align: left;
+  cursor: pointer;
+}
+.taxform-foldout-toggle:hover { background: #f2f2f3; }
+.taxform-foldout-icon { font-size: 20px; color: #6c767f; }
+.taxform-foldout-hint {
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 12px;
+  color: #6c767f;
+}
+.taxform-foldout-row:not(.hidden) td {
+  background: #fafafb;
+}
+.taxform-foldout-separator td {
+  padding: 0;
+  border: none;
+  height: 0;
+}
+.taxform-foldout-separator:not(.hidden) td {
+  padding: 0 12px 14px;
+  background: #fafafb;
+  border-bottom: 2px solid #e4e5e7;
+}
+.taxform-sheet.taxform-foldout-is-open .taxform-foldout-separator:not(.hidden) + .taxform-group-head td {
+  padding-top: 18px;
+  background: #fff;
+}
+.taxform-group-head--nested td {
+  padding-top: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c767f;
+  background: #fcfcfd;
+}
+.taxform-berechnung-block {
+  margin-top: 28px;
+  padding-top: 8px;
+  border-top: 1px solid #e4e5e7;
+}
+.taxform-berechnung-block .taxform-sheet--simple {
+  min-width: 480px;
+  max-width: 100%;
+}

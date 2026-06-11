@@ -1,3 +1,11 @@
+(function initFigmaCaptureIfRequested() {
+  if (!location.hash || location.hash.indexOf('figmacapture=') === -1) return;
+  var s = document.createElement('script');
+  s.src = 'https://mcp.figma.com/mcp/html-to-design/capture.js';
+  s.async = true;
+  document.head.appendChild(s);
+})();
+
 function openModal(id) {
   document.getElementById(id).classList.remove('hidden');
 }
@@ -18,9 +26,12 @@ function openSidePanel(trigger) {
 
   var cell = null;
   if (trigger && trigger.closest) {
-    cell = trigger.closest('td.cell-autofill');
+    cell =
+      trigger.closest('td.cell-autofill') ||
+      trigger.closest('.taxform-cell.cell-autofill') ||
+      trigger.closest('.taxform-cell');
   }
-  if (!cell) cell = document.getElementById('cellEntgelte');
+  if (!cell) cell = document.getElementById('cellJahresueberschuss') || document.getElementById('cellEntgelte');
 
   updateSidePanelSyncState(cell);
   panel.classList.add('open');
@@ -39,7 +50,10 @@ function updateSidePanelSyncState(cell) {
   unsynced.classList.toggle('hidden', !isOverridden);
 
   if (amountEl && cell) {
-    var valueEl = cell.querySelector('[data-autofill-value]');
+    var valueEl =
+      cell.querySelector('[data-autofill-value]') ||
+      cell.querySelector('.taxform-manual-input') ||
+      cell.querySelector('input');
     var raw = valueEl ? (valueEl.textContent || valueEl.value || '').trim() : '';
     amountEl.textContent = raw ? raw.replace('.', ',') + ' €' : amountEl.textContent;
   }
@@ -54,14 +68,20 @@ function toggleExpand(rowId) {
 function toggleBookingEntry() {
   var cb = document.getElementById('generateEntry');
   var block = document.getElementById('entryBlock');
-  if (cb && block) block.classList.toggle('hidden', !cb.checked);
+  if (!cb || !block) return;
+  block.classList.toggle('hidden', !cb.checked);
+  if (cb.checked) {
+    var amount = typeof recalcGewerbesteuer === 'function' ? recalcGewerbesteuer() : getGewerbesteuerAmount();
+    var preview = document.getElementById('buchungGewerbesteuerPreview');
+    if (preview) preview.textContent = formatAmountDotted(amount) + ' €';
+  }
 }
 function showBookingPreview() {
   var el = document.getElementById('bookingPreview');
   if (el) el.classList.add('visible');
 }
 function markCellEdited(el) {
-  var cell = el.closest('td') || el;
+  var cell = el.closest('td') || el.closest('.taxform-cell') || el;
   if (!cell || !cell.classList.contains('cell-autofill')) return;
 
   var original = el.getAttribute('data-autofill-value');
@@ -75,6 +95,9 @@ function markCellEdited(el) {
   var panel = document.getElementById('sidePanel');
   if (panel && panel.classList.contains('open')) {
     updateSidePanelSyncState(cell);
+  }
+  if (typeof updateTaxformModifiedBadge === 'function') {
+    updateTaxformModifiedBadge();
   }
 }
 function selectTransmissionCard(which) {
@@ -345,6 +368,29 @@ async function exportFormPreviewPdf() {
   downloadBlob(await pdfDoc.save(), 'GewSt1A_2025_Vorschau.pdf');
 }
 
+async function downloadGewstFormFromTransmission() {
+  var btn = document.getElementById('downloadFormBtn');
+  var originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'PDF wird erstellt …';
+  }
+  try {
+    if (!pdfPreviewState.rendered) {
+      await renderFormPreviewPdf(false);
+    }
+    await exportFormPreviewPdf();
+  } catch (err) {
+    console.error(err);
+    alert('PDF konnte nicht erstellt werden. Bitte Prototyp über einen lokalen Webserver öffnen.');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalHtml;
+    }
+  }
+}
+
 function printFormPreview() {
   window.print();
 }
@@ -504,6 +550,27 @@ function exportKstPreviewMock() {
   link.remove();
 }
 
+async function downloadKstFormFromTransmission() {
+  var btn = document.getElementById('downloadFormBtn');
+  var originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'PDF wird erstellt …';
+  }
+  try {
+    initKstFormPreview();
+    exportKstPreviewMock();
+  } catch (err) {
+    console.error(err);
+    alert('Export konnte nicht erstellt werden.');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalHtml;
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   initBerechnungPage();
   initTransmissionPage();
@@ -512,6 +579,8 @@ document.addEventListener('DOMContentLoaded', function() {
   initKstBerechnungPage();
   initKstDashboardPage();
   initKstFormPreview();
+  if (typeof initGewstFormPage === 'function') initGewstFormPage();
+  if (typeof initKstFormPage === 'function') initKstFormPage();
 
   if (document.getElementById('pdfPreviewPages') && !document.getElementById('kstPreviewPage')) {
     renderFormPreviewPdf(false).then(function() {

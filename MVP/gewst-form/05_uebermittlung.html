@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KSt — Übermittlung</title>
+  <title>GewSt Formular — Übermittlung</title>
   <link rel="stylesheet" href="../../styles.css">
-  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 </head>
-<body data-flow="kst">
+<body>
 <div class="layout">
   <aside class="sidebar">
     <div class="sidebar-logo"><a href="/" class="sidebar-logo-link" aria-label="Zurück zur Startseite"><div class="sidebar-logo-mark">P</div></a></div>
@@ -28,16 +27,15 @@
     <div class="wizard-header">
       <div class="wizard-meta">
         <div>
-          <div class="wizard-title">Körperschaftsteuererklärung</div>
-          <div class="wizard-subtitle">Geschäftsjahr 2025 · Übermittlung</div>
+          <div class="wizard-title">Gewerbesteuererklärung</div>
+          <div class="wizard-subtitle">Erhebungsjahr 2025 · Übermittlung</div>
         </div>
-        <div class="wizard-progress-text">4/4 Schritte erledigt</div>
+        <div class="wizard-progress-text">3/3 Schritte erledigt</div>
       </div>
       <nav class="wizard-steps">
         <a href="02_bemessungsgrundlagen.html" class="wizard-step completed"><span class="wizard-step-num">1</span> Bemessungsgrundlagen</a>
         <a href="03_berechnung.html" class="wizard-step completed"><span class="wizard-step-num">2</span> Berechnung</a>
-        <a href="04_buchungssaetze.html" class="wizard-step completed"><span class="wizard-step-num">3</span> Buchungssätze</a>
-        <span class="wizard-step active"><span class="wizard-step-num">4</span> Übermittlung</span>
+        <span class="wizard-step active"><span class="wizard-step-num">3</span> Übermittlung</span>
       </nav>
     </div>
 
@@ -74,11 +72,11 @@
         <hr class="divider">
 
         <div class="transmission-summary">
-          <div class="transmission-summary-title">Geschäftsjahr 2025</div>
+          <div class="transmission-summary-title">Erhebungsjahr 2025</div>
           <table class="transmission-summary-table">
             <thead>
               <tr>
-                <th colspan="2">Steuerlast KSt + Soli</th>
+                <th colspan="2">Vorauszahlung / Überschuss</th>
                 <th></th>
               </tr>
             </thead>
@@ -86,7 +84,7 @@
               <tr>
                 <td>Steuerschuld</td>
                 <td>Gesamt</td>
-                <td class="col-right col-mono"><strong id="steuerschuldValue">452,12 €</strong></td>
+                <td class="col-right col-mono"><strong id="steuerschuldValue">0,00 €</strong></td>
               </tr>
             </tbody>
           </table>
@@ -97,9 +95,9 @@
         <div class="transmission-export">
           <div class="transmission-section-title">Formular exportieren</div>
           <p class="text-small text-muted" style="margin:8px 0 16px;">
-            Laden Sie die ausgefüllte KSt 1 A als PDF herunter, um sie an Ihren Mandanten weiterzuleiten — z.&nbsp;B. per E-Mail oder in Ihrem Dokumentenmanagement.
+            Laden Sie die ausgefüllte GewSt 1 A als PDF herunter, um sie an Ihren Mandanten weiterzuleiten — z.&nbsp;B. per E-Mail oder in Ihrem Dokumentenmanagement.
           </p>
-          <button type="button" class="btn btn-secondary" id="downloadFormBtn" onclick="downloadKstFormFromTransmission()">
+          <button type="button" class="btn btn-secondary" id="downloadFormBtn" onclick="downloadGewstFormFromTransmission()">
             <span class="ms" style="font-size:18px; vertical-align:-3px;">download</span>
             Formular herunterladen (PDF)
           </button>
@@ -109,20 +107,17 @@
     </div>
 
     <div class="wizard-footer">
-      <a href="07_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
-      <a href="08_dashboard-saved.html" class="btn btn-primary" id="transmissionPrimaryBtn">Speichern</a>
+      <a href="05_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
+      <a href="06_dashboard-saved.html" class="btn btn-primary" id="transmissionPrimaryBtn">Speichern</a>
     </div>
   </div>
 </div>
 
 <div class="visually-hidden" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
-  <div id="pdfPreviewPages" data-flow="kst">
-    <div class="pdf-export-page" id="kstPreviewPage" style="width:820px;">
-      <img src="../../assets/kst/preview-page.png" alt="KSt Erklärung Seite 1" width="820">
-    </div>
-  </div>
+  <div id="pdfPreviewPages"></div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="../prototype.js"></script>
 </body>
 </html>

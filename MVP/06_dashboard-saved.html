@@ -39,7 +39,7 @@
         <table class="data-table">
           <thead>
             <tr>
-              <th>Zeitraum</th>
+              <th>Erhebungsjahr</th>
               <th>Erstellt von</th>
               <th>Status</th>
               <th>Zuletzt geändert</th>
@@ -52,7 +52,7 @@
           </thead>
           <tbody>
             <tr>
-              <td>01.01.2025 – 31.12.2025</td>
+              <td>2025</td>
               <td>
                 <span class="table-user">
                   <span class="table-user-avatar">TW</span>
@@ -82,22 +82,19 @@
 <div class="modal-overlay hidden" id="duplicateModal">
   <div class="modal" style="max-width:400px;">
     <div class="modal-title">Gewerbesteuererklärung erstellen</div>
-    <div class="modal-subtitle">Wählen Sie den Stichtag für die Erklärung.</div>
+    <div class="modal-subtitle">Für das Erhebungsjahr 2025 existiert bereits eine Erklärung.</div>
     <div class="form-field">
-      <label class="form-label">Stichtag</label>
+      <label class="form-label">Erhebungsjahr</label>
       <div class="disabled-date-tooltip">
-        <div class="form-input-with-icon">
-          <input type="text" class="form-input" value="31.12.2025" disabled>
-          <span class="ms input-icon">calendar_today</span>
-        </div>
+        <input type="text" class="form-input form-input--year" value="2025" disabled>
         <div class="info-tooltip" role="tooltip">
           <span class="ms info-tooltip-icon">info</span>
-          <p>Pro Geschäftsjahr ist derzeit nur eine Gewerbesteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+          <p>Die Gewerbesteuer gilt immer für das Kalenderjahr (1. Jan.–31. Dez.) — auch wenn der Mandant ein abweichendes Wirtschaftsjahr hat. Pro Jahr ist eine Erklärung vorgesehen.</p>
         </div>
       </div>
       <div class="field-warning">
         <span class="ms filled">error</span>
-        <span>Für diesen Stichtag existiert bereits eine Erklärung. Bitte bearbeiten Sie die bestehende Erklärung.</span>
+        <span>Bitte bearbeiten Sie die bestehende Erklärung für 2025.</span>
       </div>
     </div>
     <div class="modal-actions" style="justify-content:flex-end;">

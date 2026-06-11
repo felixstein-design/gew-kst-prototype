@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KSt — Dashboard (leer)</title>
+  <title>GewSt Formular — Dashboard (leer)</title>
   <link rel="stylesheet" href="../../styles.css">
-  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 </head>
 <body>
 <div class="layout">
@@ -27,20 +26,20 @@
   <div class="content">
     <div class="page-titlebar">
       <div>
-        <h1>Körperschaftsteuer (KSt)</h1>
-        <div class="page-titlebar-meta">Mandant: Hausmann &amp; Partner GmbH · Geschäftsjahr 2025</div>
+        <h1>Gewerbesteuer-Erklärungen</h1>
+        <div class="page-titlebar-meta">Mandant: Hausmann &amp; Partner GmbH · Iteration: Formularansicht</div>
       </div>
       <div class="page-controls">
-        <button class="btn btn-primary" onclick="openModal('createModal')">Berechnung hinzufügen</button>
+        <button class="btn btn-primary" onclick="openModal('createModal')">Gewerbesteuererklärung erstellen</button>
       </div>
     </div>
 
     <div class="main">
       <div class="empty-state">
-        <div class="empty-state-icon"><span class="ms">calculate</span></div>
-        <h2>Körperschaftsteuer berechnen</h2>
-        <p>Erstellen Sie Ihre erste Körperschaftsteuerberechnung für diesen Mandanten.</p>
-        <button class="btn btn-primary btn-lg" onclick="openModal('createModal')">Berechnung hinzufügen</button>
+        <div class="empty-state-icon"><span class="ms">description</span></div>
+        <h2>Verwalten Sie Ihre Gewerbesteuer-Erklärungen</h2>
+        <p>Erstellen Sie Ihre erste Gewerbesteuererklärung mit dem offiziellen GewSt 1 A Formular.</p>
+        <button class="btn btn-primary btn-lg" onclick="openModal('createModal')">Gewerbesteuererklärung erstellen</button>
       </div>
     </div>
   </div>
@@ -48,18 +47,15 @@
 
 <div class="modal-overlay hidden" id="createModal">
   <div class="modal" style="max-width:400px;">
-    <div class="modal-title">Körperschaftsteuerberechnung erstellen</div>
-    <div class="modal-subtitle">Wählen Sie den Stichtag für die Berechnung.</div>
+    <div class="modal-title">Gewerbesteuererklärung erstellen</div>
+    <div class="modal-subtitle">Erklärung für Erhebungsjahr 2025 erstellen.</div>
     <div class="form-field">
-      <label class="form-label">Stichtag</label>
+      <label class="form-label">Erhebungsjahr</label>
       <div class="disabled-date-tooltip">
-        <div class="form-input-with-icon">
-          <input type="text" class="form-input" value="31.12.2025" disabled>
-          <span class="ms input-icon">calendar_today</span>
-        </div>
+        <input type="text" class="form-input form-input--year" value="2025" disabled>
         <div class="info-tooltip" role="tooltip">
           <span class="ms info-tooltip-icon">info</span>
-          <p>Pro Geschäftsjahr ist derzeit nur eine Körperschaftsteuerberechnung möglich. Der Stichtag ist deshalb auf den 31.12.2025 festgelegt.</p>
+          <p>Die Gewerbesteuer gilt immer für das Kalenderjahr (1. Jan.–31. Dez.) — auch wenn der Mandant ein abweichendes Wirtschaftsjahr hat. Pro Jahr ist eine Erklärung vorgesehen.</p>
         </div>
       </div>
     </div>

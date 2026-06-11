@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GewSt Formular — Berechnung</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><a href="/" class="sidebar-logo-link" aria-label="Zurück zur Startseite"><div class="sidebar-logo-mark">P</div></a></div>
+    <div class="sidebar-roles">
+      <button class="role-btn active">Steuer­berater</button>
+      <button class="role-btn muted">Mandant</button>
+    </div>
+    <nav class="nav-main">
+      <a href="#" class="nav-item"><span class="ms">receipt_long</span>Buchführung</a>
+      <a href="#" class="nav-item"><span class="ms">assessment</span>Jahres­abschlüsse</a>
+      <a href="#" class="nav-item active"><span class="ms">account_balance</span>Besteuerung</a>
+      <a href="#" class="nav-item"><span class="ms">bar_chart</span>Auswertungen</a>
+      <a href="#" class="nav-item"><span class="ms">folder</span>Stammdaten</a>
+    </nav>
+  </aside>
+
+  <div class="content">
+    <div class="wizard-header">
+      <div class="wizard-meta">
+        <div>
+          <div class="wizard-title">Gewerbesteuererklärung</div>
+          <div class="wizard-subtitle">Erhebungsjahr 2025 · Berechnung und Buchungssätze</div>
+        </div>
+        <div class="wizard-progress-text">2/3 Schritte erledigt</div>
+      </div>
+      <nav class="wizard-steps">
+        <a href="02_bemessungsgrundlagen.html" class="wizard-step completed"><span class="wizard-step-num">1</span> Bemessungsgrundlagen</a>
+        <span class="wizard-step active"><span class="wizard-step-num">2</span> Berechnung</span>
+        <span class="wizard-step"><span class="wizard-step-num">3</span> Übermittlung</span>
+      </nav>
+    </div>
+
+    <div class="main main--declaration-step">
+      <div class="berechnung-panel">
+        <div class="taxform-container">
+          <div class="taxform-sheet-header">
+            <div class="taxform-sheet-header-main">
+              <h2 class="taxform-period">Erhebungsjahr 2025</h2>
+              <span class="taxform-form-id">Berechnung der Gewerbesteuer</span>
+            </div>
+            <span class="taxform-saved"><span class="ms">cloud_done</span> Gespeichert</span>
+          </div>
+
+          <div id="berechnungMount"></div>
+
+          <div class="taxform-entry-section">
+            <label class="entry-checkbox">
+              <input type="checkbox" id="generateEntry" onchange="toggleBookingEntry()">
+              Buchungssatz generieren
+            </label>
+
+            <div class="entry-block hidden" id="entryBlock">
+            <p class="text-small text-muted" style="margin:16px 16px 0;">Gewerbesteuer: <strong id="buchungGewerbesteuerPreview">0,00 €</strong></p>
+
+            <table class="taxform-sheet taxform-sheet--booking" style="border:none; border-radius:0;">
+              <thead>
+                <tr>
+                  <th class="taxform-col-desc">Konto</th>
+                  <th class="taxform-col-amount">Soll</th>
+                  <th class="taxform-col-amount">Haben</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="taxform-group-head">
+                  <td colspan="3">
+                    <div class="taxform-entry-meta">
+                      <select class="entry-select" aria-label="Journal">
+                        <option selected>OD</option>
+                      </select>
+                      <div class="disabled-date-tooltip disabled-date-tooltip--compact">
+                        <input type="text" class="entry-date" value="31.12.2025" disabled>
+                        <div class="info-tooltip" role="tooltip">
+                          <span class="ms info-tooltip-icon">info</span>
+                          <p>Der Buchungssatz wird zum 31.12. des Erhebungsjahres gebucht.</p>
+                        </div>
+                      </div>
+                      <span class="entry-label">Gewerbesteuer 2025</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="taxform-row">
+                  <td class="taxform-col-desc">6320 — Gewerbesteuer</td>
+                  <td class="taxform-value taxform-value--input">
+                    <div class="taxform-cell cell-autofill">
+                      <span class="taxform-field-amount" id="bookingExpenseSoll">0,00</span>
+                    </div>
+                  </td>
+                  <td class="taxform-value taxform-value--input">
+                    <div class="taxform-cell">
+                      <span class="taxform-field-amount">0,00</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="taxform-row">
+                  <td class="taxform-col-desc">3840 — Gewerbesteuer-Verbindlichkeit</td>
+                  <td class="taxform-value taxform-value--input">
+                    <div class="taxform-cell">
+                      <span class="taxform-field-amount">0,00</span>
+                    </div>
+                  </td>
+                  <td class="taxform-value taxform-value--input">
+                    <div class="taxform-cell cell-autofill">
+                      <span class="taxform-field-amount" id="bookingLiabilityHaben">0,00</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="taxform-row taxform-row--total">
+                  <td class="taxform-col-desc"><strong>Summe</strong></td>
+                  <td class="taxform-value taxform-value--input">
+                    <div class="taxform-cell cell-autofill">
+                      <span class="taxform-field-amount"><strong id="bookingExpenseTotal">0,00</strong></span>
+                    </div>
+                  </td>
+                  <td class="taxform-value taxform-value--input">
+                    <div class="taxform-cell cell-autofill">
+                      <span class="taxform-field-amount"><strong id="bookingLiabilityTotal">0,00</strong></span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-footer">
+      <a href="05_dashboard-in-progress.html" class="btn btn-ghost">Abschließen und später bearbeiten</a>
+      <a href="05_uebermittlung.html" class="btn btn-primary">Speichern und Weiter</a>
+    </div>
+  </div>
+</div>
+<script src="gewst-form-fields.js"></script>
+<script src="../prototype.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var mount = document.getElementById('berechnungMount');
+  if (mount) mount.innerHTML = renderBerechnungBlockHtml();
+  initBerechnungPage();
+});
+</script>
+</body>
+</html>

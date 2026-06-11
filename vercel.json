@@ -3,6 +3,7 @@
     { "source": "/", "destination": "/MVP/index.html" },
     { "source": "/prototype.js", "destination": "/MVP/prototype.js" },
     { "source": "/kst/:path*", "destination": "/MVP/kst/:path*" },
+    { "source": "/gewst-form/:path*", "destination": "/MVP/gewst-form/:path*" },
     { "source": "/:file(.*\\.html)", "destination": "/MVP/:file" }
   ],
   "headers": [
