@@ -3,6 +3,9 @@ var GEWST_REVIEW_WARNING_TEXT =
 
 var STAMMDATEN_SECTION_IDS = ['allgemein', 'betrieb'];
 
+/** Demo: GewSt-Vorauszahlungen (SKR 7610) — credited in Step 2 only; 7641 is not deducted here. */
+var GEWST_VORAUSZAHLUNGEN_7610 = 5040;
+
 var GEWST_BERECHNUNG_ROWS = [
   { label: 'Gewerbeertrag', value: '53 714,47', autofill: true },
   { label: 'Gewerbeertrag (abgerundet auf 100 €)', value: '53 700,00', autofill: true },
@@ -10,7 +13,33 @@ var GEWST_BERECHNUNG_ROWS = [
   { label: 'Hinzurechnungen nach Freibetrag 200.000 € (25 %)', value: '3 799,11', autofill: true },
   { label: 'Steuermessbetrag (3,5 %)', value: '1 879,50', autofill: true },
   { label: 'Hebesatz der Gemeinde (%)', value: '0,00', manual: true, inputId: 'hebesatzInput' },
-  { label: 'Gewerbesteuer', value: '0,00', autofill: true, total: true, valueId: 'gewerbesteuerValue' },
+  {
+    label: 'Festzusetzende Gewerbesteuer',
+    value: '0,00',
+    autofill: true,
+    subtotal: true,
+    valueId: 'gewerbesteuerValue'
+  }
+];
+
+var GEWST_PREPAYMENT_ROWS = [
+  {
+    label: 'Vorauszahlungen — Konto 7610 (§ 20 GewStG)',
+    value: '5 040,00',
+    autofill: true,
+    deduction: true,
+    valueId: 'vorauszahlungen7610Value'
+  },
+  {
+    label: 'Verbleibende GewSt-Rückstellung',
+    value: '0,00',
+    autofill: true,
+    total: true,
+    valueId: 'gewstRueckstellungValue'
+  }
+];
+
+var GEWST_BERECHNUNG_TAIL_ROWS = [
   { label: 'Verbleibender Verlust für Folgejahre', value: '0,00', autofill: true }
 ];
 
@@ -475,42 +504,49 @@ function renderGewstFormSheetBody(mode, options) {
   return html;
 }
 
+function renderBerechnungRowHtml(row) {
+  var valueHtml;
+  if (row.manual) {
+    valueHtml =
+      '<input type="text" class="taxform-manual-input" id="' +
+      row.inputId +
+      '" value="' +
+      escapeHtml(row.value) +
+      '" aria-label="' +
+      escapeHtml(row.label) +
+      '">';
+  } else {
+    var idAttr = row.valueId ? ' id="' + row.valueId + '"' : '';
+    var inner = row.total
+      ? '<strong><span class="taxform-field-amount"' + idAttr + '>' + escapeHtml(row.value) + '</span></strong>'
+      : '<span class="taxform-field-amount"' + idAttr + '>' + escapeHtml(row.value) + '</span>';
+    valueHtml = inner;
+  }
+  var cellClass = row.autofill ? 'taxform-cell cell-autofill' : 'taxform-cell';
+  var rowClasses = ['taxform-row'];
+  if (row.total) rowClasses.push('taxform-row--total');
+  if (row.subtotal) rowClasses.push('taxform-row--subtotal');
+  if (row.deduction) rowClasses.push('taxform-row--deduction');
+  return (
+    '<tr class="' +
+    rowClasses.join(' ') +
+    '">' +
+    '<td class="taxform-col-desc">' +
+    (row.total ? '<strong>' + escapeHtml(row.label) + '</strong>' : escapeHtml(row.label)) +
+    '</td>' +
+    '<td class="taxform-value taxform-value--input">' +
+    '<div class="' +
+    cellClass +
+    '">' +
+    '<span class="taxform-field-amount">' +
+    valueHtml +
+    '</span></div></td></tr>'
+  );
+}
+
 function renderBerechnungBlockHtml() {
-  var rows = GEWST_BERECHNUNG_ROWS.map(function(row) {
-    var valueHtml;
-    if (row.manual) {
-      valueHtml =
-        '<input type="text" class="taxform-manual-input" id="' +
-        row.inputId +
-        '" value="' +
-        escapeHtml(row.value) +
-        '" aria-label="' +
-        escapeHtml(row.label) +
-        '">';
-    } else {
-      var idAttr = row.valueId ? ' id="' + row.valueId + '"' : '';
-      var inner = row.total
-        ? '<strong><span class="taxform-field-amount"' + idAttr + '>' + escapeHtml(row.value) + '</span></strong>'
-        : '<span class="taxform-field-amount"' + idAttr + '>' + escapeHtml(row.value) + '</span>';
-      valueHtml = inner;
-    }
-    var cellClass = row.autofill ? 'taxform-cell cell-autofill' : 'taxform-cell';
-    return (
-      '<tr class="taxform-row' +
-      (row.total ? ' taxform-row--total' : '') +
-      '">' +
-      '<td class="taxform-col-desc">' +
-      (row.total ? '<strong>' + escapeHtml(row.label) + '</strong>' : escapeHtml(row.label)) +
-      '</td>' +
-      '<td class="taxform-value taxform-value--input">' +
-      '<div class="' +
-      cellClass +
-      '">' +
-      '<span class="taxform-field-amount">' +
-      valueHtml +
-      '</span></div></td></tr>'
-    );
-  }).join('');
+  var rows = GEWST_BERECHNUNG_ROWS.map(renderBerechnungRowHtml).join('');
+  var prepaymentRows = GEWST_PREPAYMENT_ROWS.map(renderBerechnungRowHtml).join('');
 
   return (
     '<div class="taxform-berechnung-block">' +
@@ -518,6 +554,12 @@ function renderBerechnungBlockHtml() {
     '<thead><tr><th class="taxform-col-desc"></th><th class="taxform-col-amount">Betrag in EUR</th></tr></thead>' +
     '<tbody><tr class="taxform-group-head"><td colspan="2">Berechnung der Gewerbesteuer</td></tr>' +
     rows +
+    '<tr class="taxform-group-head taxform-group-head--prepayment"><td colspan="2">Vorauszahlungen / Rückstellung</td></tr>' +
+    '<tr class="taxform-row taxform-row--hint"><td colspan="2" class="taxform-berechnung-hint">' +
+    'Nur Konto 7610 (Vorauszahlungen) wird angerechnet. Nachzahlungen Vorjahr (7641) werden nicht abgezogen.' +
+    '</td></tr>' +
+    prepaymentRows +
+    GEWST_BERECHNUNG_TAIL_ROWS.map(renderBerechnungRowHtml).join('') +
     '</tbody></table></div>'
   );
 }

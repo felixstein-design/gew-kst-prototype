@@ -71,7 +71,12 @@ function toggleBookingEntry() {
   if (!cb || !block) return;
   block.classList.toggle('hidden', !cb.checked);
   if (cb.checked) {
-    var amount = typeof recalcGewerbesteuer === 'function' ? recalcGewerbesteuer() : getGewerbesteuerAmount();
+    var amount =
+      typeof recalcGewerbesteuer === 'function'
+        ? recalcGewerbesteuer()
+        : document.getElementById('gewstRueckstellungValue')
+          ? getGewstRueckstellungAmount()
+          : getGewerbesteuerAmount();
     var preview = document.getElementById('buchungGewerbesteuerPreview');
     if (preview) preview.textContent = formatAmountDotted(amount) + ' €';
   }
@@ -120,6 +125,7 @@ function selectTransmissionCard(which) {
 
 var STEUERMESSBETRAG = 1879.5;
 var GEWERBESTEUER_STORAGE_KEY = 'gewstMvpGewerbesteuer';
+var GEWERBESTEUER_NET_STORAGE_KEY = 'gewstMvpGewerbesteuerNet';
 
 function parseGermanAmount(str) {
   return parseFloat(String(str || '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.')) || 0;
@@ -155,8 +161,20 @@ function getGewerbesteuerAmount() {
   return 0;
 }
 
-function persistGewerbesteuer(amount) {
-  sessionStorage.setItem(GEWERBESTEUER_STORAGE_KEY, String(amount));
+function getGewstVorauszahlungen7610() {
+  if (typeof GEWST_VORAUSZAHLUNGEN_7610 !== 'undefined') return GEWST_VORAUSZAHLUNGEN_7610;
+  return 5040;
+}
+
+function getGewstRueckstellungAmount() {
+  var stored = sessionStorage.getItem(GEWERBESTEUER_NET_STORAGE_KEY);
+  if (stored != null && stored !== '') return parseFloat(stored) || 0;
+  return Math.max(0, getGewerbesteuerAmount() - getGewstVorauszahlungen7610());
+}
+
+function persistGewerbesteuer(gross, net) {
+  sessionStorage.setItem(GEWERBESTEUER_STORAGE_KEY, String(gross));
+  if (net != null) sessionStorage.setItem(GEWERBESTEUER_NET_STORAGE_KEY, String(net));
 }
 
 function recalcGewerbesteuer() {
@@ -165,17 +183,31 @@ function recalcGewerbesteuer() {
   if (!input || !gewerbesteuerEl) return 0;
 
   var hebesatz = parseGermanAmount(input.value);
-  var gewerbesteuer = STEUERMESSBETRAG * hebesatz / 100;
-  gewerbesteuerEl.textContent = formatAmountSpaced(gewerbesteuer);
-  persistGewerbesteuer(gewerbesteuer);
+  var gross = STEUERMESSBETRAG * hebesatz / 100;
+  gewerbesteuerEl.textContent = formatAmountSpaced(gross);
 
-  var amountDotted = formatAmountDotted(gewerbesteuer);
+  var rueckstellungEl = document.getElementById('gewstRueckstellungValue');
+  var bookingAmount = gross;
+  if (rueckstellungEl) {
+    var prepayment = getGewstVorauszahlungen7610();
+    var net = Math.max(0, gross - prepayment);
+    rueckstellungEl.textContent = formatAmountSpaced(net);
+    bookingAmount = net;
+    persistGewerbesteuer(gross, net);
+  } else {
+    persistGewerbesteuer(gross);
+  }
+
+  var amountDotted = formatAmountDotted(bookingAmount);
   ['bookingExpenseSoll', 'bookingExpenseTotal', 'bookingLiabilityHaben', 'bookingLiabilityTotal'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.textContent = amountDotted;
   });
 
-  return gewerbesteuer;
+  var preview = document.getElementById('buchungGewerbesteuerPreview');
+  if (preview) preview.textContent = amountDotted + ' €';
+
+  return rueckstellungEl ? bookingAmount : gross;
 }
 
 function initBerechnungPage() {
@@ -187,11 +219,29 @@ function initBerechnungPage() {
 }
 
 function initTransmissionPage() {
-  var steuerschuldEl = document.getElementById('steuerschuldValue');
-  if (!steuerschuldEl) return;
   var isKst = document.body && document.body.dataset.flow === 'kst';
-  var amount = isKst ? getKstTaxTotal() : getGewerbesteuerAmount();
-  steuerschuldEl.textContent = formatAmountDotted(amount) + ' €';
+  if (isKst) {
+    var steuerschuldEl = document.getElementById('steuerschuldValue');
+    if (!steuerschuldEl) return;
+    steuerschuldEl.textContent = formatAmountDotted(getKstTaxTotal()) + ' €';
+    return;
+  }
+
+  var festsetzungEl = document.getElementById('transmissionFestsetzungValue');
+  var vorauszahlungenEl = document.getElementById('transmissionVorauszahlungenValue');
+  var steuerschuldEl = document.getElementById('steuerschuldValue');
+  if (festsetzungEl && vorauszahlungenEl && steuerschuldEl) {
+    var gross = getGewerbesteuerAmount();
+    var prepayment = getGewstVorauszahlungen7610();
+    var net = getGewstRueckstellungAmount();
+    festsetzungEl.textContent = formatAmountDotted(gross) + ' €';
+    vorauszahlungenEl.textContent = '− ' + formatAmountDotted(prepayment) + ' €';
+    steuerschuldEl.textContent = formatAmountDotted(net) + ' €';
+    return;
+  }
+
+  if (!steuerschuldEl) return;
+  steuerschuldEl.textContent = formatAmountDotted(getGewerbesteuerAmount()) + ' €';
 }
 var FORM_PREVIEW_PAGE_COUNT = 9;
 function getPrototypeAssetBase() {
