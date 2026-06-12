@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KSt — Buchungssätze</title>
   <link rel="stylesheet" href="../../styles.css">
-  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
 </head>
 <body>
 <div class="layout">
@@ -102,36 +101,6 @@
 
       <div class="section-title">Steuerbuchungen</div>
 
-      <div class="kst-provision-switch">
-        <div class="kst-provision-toggle-row">
-          <label class="kst-provision-switch-text" for="kstProvisionSwitch">
-            Körperschaftsteuer- und Solidaritätszuschlag-Rückstellungen sind in der Buchführung bereits berücksichtigt
-          </label>
-          <label class="toggle toggle--interactive">
-            <input type="checkbox" id="kstProvisionSwitch">
-            <span class="toggle-switch" aria-hidden="true"></span>
-          </label>
-        </div>
-        <p class="text-small text-muted kst-provision-switch-hint">
-          Entspricht dem DATEV-Schalter: bestehende Rückstellungen (0963 / 0955) werden abgezogen — es wird nur das Delta gebucht.
-        </p>
-      </div>
-
-      <div class="kst-delta-summary hidden" id="kstExistingProvisionBlock">
-        <div class="kst-delta-summary-row">
-          <span>Bestehende Rückstellung Konto 0963</span>
-          <span class="col-mono">80,00 €</span>
-        </div>
-        <div class="kst-delta-summary-row">
-          <span>Bestehende Rückstellung Konto 0955</span>
-          <span class="col-mono">4,40 €</span>
-        </div>
-        <div class="kst-delta-summary-row kst-delta-summary-row--emphasis">
-          <span>Zu buchendes Delta KöSt / SolZ</span>
-          <span class="col-mono"><strong id="kstDeltaKstValue">48,55</strong> / <strong id="kstDeltaSoliValue">2,67</strong> €</span>
-        </div>
-      </div>
-
       <div class="entry-section">
         <label class="entry-checkbox">
           <input type="checkbox" id="generateEntry" onchange="toggleBookingEntry()">
@@ -139,6 +108,41 @@
         </label>
 
         <div class="entry-block hidden" id="entryBlock">
+          <div class="kst-provision-switch kst-provision-switch--in-entry">
+            <div class="kst-provision-toggle-row">
+              <label class="kst-provision-switch-text" for="kstProvisionSwitch">
+                Körperschaftsteuer- und Solidaritätszuschlag-Rückstellungen sind in der Buchführung bereits berücksichtigt
+              </label>
+              <label class="toggle toggle--interactive">
+                <input type="checkbox" id="kstProvisionSwitch" checked>
+                <span class="toggle-switch" aria-hidden="true"></span>
+              </label>
+            </div>
+            <div class="kst-provision-auto-info" id="kstProvisionAutoInfo">
+              <span class="ms" aria-hidden="true">info</span>
+              <p>
+                Vorausgewählt, weil in Schritt 1 ein KSt/Soli-Aufwand (§10 Nr. 2 KStG) von
+                <strong>84,40 €</strong> aus der Buchführung übernommen wurde — bestehende Rückstellungen auf
+                0963 / 0955 werden abgezogen, es wird nur das Delta gebucht.
+              </p>
+            </div>
+          </div>
+
+          <div class="kst-delta-summary" id="kstExistingProvisionBlock">
+            <div class="kst-delta-summary-row">
+              <span>Bestehende Rückstellung Konto 0963</span>
+              <span class="col-mono">80,00 €</span>
+            </div>
+            <div class="kst-delta-summary-row">
+              <span>Bestehende Rückstellung Konto 0955</span>
+              <span class="col-mono">4,40 €</span>
+            </div>
+            <div class="kst-delta-summary-row kst-delta-summary-row--emphasis">
+              <span>Zu buchendes Delta KöSt / SolZ</span>
+              <span class="col-mono"><strong id="kstDeltaKstValue">48,55</strong> / <strong id="kstDeltaSoliValue">2,67</strong> €</span>
+            </div>
+          </div>
+
           <p class="text-small text-muted" style="margin:16px 0 8px;">
             Netto-KöSt-Rückstellung: <strong id="kstBookingNetKstPreview">128,55 €</strong>
             · Buchungssatz gesamt: <strong id="kstBookingPreview">135,62 €</strong>

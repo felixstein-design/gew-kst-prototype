@@ -3,18 +3,16 @@ var KST_REVIEW_WARNING_TEXT =
 
 var STAMMDATEN_SECTION_IDS = ['allgemein', 'unternehmen'];
 
-var KST_DECLARATION_TABS = [
-  { id: 'kst1', label: 'KSt 1', available: true },
-  { id: 'zve', label: 'Anlage ZVE', available: true },
-  { id: 'wa', label: 'Anlage WA', available: true },
-  { id: 'verluste', label: 'Anlage Verluste', available: true },
-  { id: 'kst1f', label: 'Anlage KSt 1 F', available: true },
-  { id: 'gk', label: 'Anlage GK', available: true },
-  { id: 'zwig', label: 'Anlage ZwiG', available: false },
-  { id: 'zinsschranke', label: 'Anlage Zinsschranke', available: false },
-  { id: 'wifoe', label: 'Anlage WiFö', available: false },
-  { id: 'steuergestaltung', label: 'Anlage Steuergestaltung', available: false },
-  { id: 'spifa', label: 'Anlage SPIFA', available: false }
+var KST_KST_SOLI_AUFWAND = '84,40';
+
+var KST_FORM_VIEW_TABS = [
+  { id: 'condensed', label: 'Kompakt', available: true },
+  {
+    id: 'extended',
+    label: 'Erweitert',
+    available: false,
+    tooltip: 'Vollständiges Formular mit allen Zeilen — auch leere Felder (noch nicht verfügbar)'
+  }
 ];
 
 var KST_FORM_SECTIONS = [
@@ -67,7 +65,13 @@ var KST_FORM_SECTIONS = [
     id: 'hinzurechnungen',
     title: 'II. §8 KStG — Hinzurechnungen',
     rows: [
-      { line: 2, label: 'KSt/Soli-Aufwand (§10 Nr. 2 KStG)', value: '0,00', kind: 'amount', autofill: true },
+      {
+        line: 2,
+        label: 'KSt/Soli-Aufwand (§10 Nr. 2 KStG)',
+        value: KST_KST_SOLI_AUFWAND,
+        kind: 'amount',
+        autofill: true
+      },
       { line: 3, label: 'Gewerbesteuer (§4 Abs. 5b EStG)', value: '0,00', kind: 'amount', autofill: true },
       { line: 4, label: 'Nicht abziehbare Geschenke', value: '0,00', kind: 'amount', autofill: true },
       { line: 5, label: 'Nicht abzugsfähige Strafen/Verspätungszuschläge', value: '0,00', kind: 'amount', autofill: true },
@@ -486,17 +490,19 @@ function markManualAmountEdited(input) {
   }
 }
 
-function renderKstDeclarationTabsHtml(activeTabId) {
-  activeTabId = activeTabId || 'kst1';
-  return KST_DECLARATION_TABS.map(function(tab) {
+function renderKstFormViewTabsHtml(activeViewId) {
+  activeViewId = activeViewId || 'condensed';
+  return KST_FORM_VIEW_TABS.map(function(tab) {
     if (!tab.available) {
       return (
         '<span class="declaration-tab is-disabled" tabindex="0">' +
         escapeHtml(tab.label) +
-        '<span class="declaration-tab-tooltip" role="tooltip">Noch nicht verfügbar</span></span>'
+        '<span class="declaration-tab-tooltip" role="tooltip">' +
+        escapeHtml(tab.tooltip || 'Noch nicht verfügbar') +
+        '</span></span>'
       );
     }
-    if (tab.id === activeTabId) {
+    if (tab.id === activeViewId) {
       return (
         '<span class="declaration-tab is-active" aria-current="page">' +
         escapeHtml(tab.label) +
@@ -514,8 +520,8 @@ function renderKstDeclarationTabsHtml(activeTabId) {
 function initKstFormPage() {
   var tabsMount = document.getElementById('kstDeclarationTabsMount');
   if (tabsMount) {
-    var activeTab = document.body.dataset.kstActiveTab || 'kst1';
-    tabsMount.innerHTML = renderKstDeclarationTabsHtml(activeTab);
+    var activeView = document.body.dataset.kstFormView || 'condensed';
+    tabsMount.innerHTML = renderKstFormViewTabsHtml(activeView);
   }
 
   var mount = document.getElementById('kstFormMount');

@@ -1,10 +1,124 @@
-(function initFigmaCaptureIfRequested() {
-  if (!location.hash || location.hash.indexOf('figmacapture=') === -1) return;
+var FIGMA_CAPTURE_SCRIPT = 'https://mcp.figma.com/mcp/html-to-design/capture.js';
+var FIGMA_MANUAL_CAPTURE_KEY = 'figmaManualCapture';
+
+function parseFigmaCaptureHash(hash) {
+  if (!hash || hash.indexOf('figmacapture=') === -1) return null;
+  var parts = hash.slice(1).split('&');
+  var captureId = '';
+  var endpoint = '';
+  var manual = false;
+  parts.forEach(function(part) {
+    var pair = part.split('=');
+    var key = pair[0];
+    var val = pair.length > 1 ? decodeURIComponent(pair.slice(1).join('=')) : '';
+    if (key === 'figmacapture' && val) captureId = val;
+    else if (key === 'figmaendpoint' && val) endpoint = val;
+    else if (key === 'figmamanual' && val !== '0' && val !== 'false') manual = true;
+  });
+  if (!captureId) return null;
+  if (!endpoint) endpoint = 'https://mcp.figma.com/mcp/capture/' + captureId + '/submit';
+  return { captureId: captureId, endpoint: endpoint, manual: manual };
+}
+
+function loadFigmaCaptureScript(onLoad) {
+  if (window.figma && window.figma.captureForDesign) {
+    if (onLoad) onLoad();
+    return;
+  }
+  var existing = document.querySelector('script[data-figma-capture="1"]');
+  if (existing) {
+    if (onLoad) existing.addEventListener('load', onLoad, { once: true });
+    return;
+  }
   var s = document.createElement('script');
-  s.src = 'https://mcp.figma.com/mcp/html-to-design/capture.js';
+  s.src = FIGMA_CAPTURE_SCRIPT;
   s.async = true;
+  s.setAttribute('data-figma-capture', '1');
+  if (onLoad) s.addEventListener('load', onLoad, { once: true });
   document.head.appendChild(s);
+}
+
+function waitForFigmaCaptureApi(callback, attempts) {
+  if (attempts == null) attempts = 40;
+  if (window.figma && window.figma.captureForDesign) {
+    callback();
+    return;
+  }
+  if (attempts <= 0) return;
+  setTimeout(function() { waitForFigmaCaptureApi(callback, attempts - 1); }, 100);
+}
+
+function mountFigmaManualCaptureBar(config) {
+  if (document.getElementById('figmaManualCaptureBar')) return;
+  var bar = document.createElement('div');
+  bar.id = 'figmaManualCaptureBar';
+  bar.className = 'figma-manual-capture-bar';
+  bar.innerHTML =
+    '<span class="figma-manual-capture-bar-text">Figma-Capture: UI vorbereiten, dann senden.</span>' +
+    '<button type="button" class="btn btn-primary figma-manual-capture-btn" id="figmaManualCaptureBtn">Ganzen Bildschirm an Figma senden</button>' +
+    '<span class="figma-manual-capture-status" id="figmaManualCaptureStatus" aria-live="polite"></span>';
+  document.body.appendChild(bar);
+
+  var btn = document.getElementById('figmaManualCaptureBtn');
+  var status = document.getElementById('figmaManualCaptureStatus');
+  if (!btn) return;
+
+  btn.addEventListener('click', function() {
+    if (btn.disabled) return;
+    btn.disabled = true;
+    if (status) status.textContent = 'Sende an Figma …';
+
+    waitForFigmaCaptureApi(function() {
+      window.figma.captureForDesign({
+        captureId: config.captureId,
+        endpoint: config.endpoint,
+        selector: 'body',
+        delayMs: 0
+      }).then(function(result) {
+        if (result && result.success === false) {
+          btn.disabled = false;
+          if (status) status.textContent = 'Fehler — bitte erneut versuchen (Tab im Vordergrund lassen).';
+          return;
+        }
+        if (status) status.textContent = 'Gesendet — Frame erscheint in Figma.';
+        btn.textContent = 'Gesendet';
+      }).catch(function() {
+        btn.disabled = false;
+        if (status) status.textContent = 'Fehler — bitte erneut versuchen.';
+      });
+    });
+  });
+}
+
+(function initFigmaCaptureIfRequested() {
+  var parsed = parseFigmaCaptureHash(location.hash);
+  if (!parsed) return;
+
+  if (parsed.manual) {
+    sessionStorage.setItem(FIGMA_MANUAL_CAPTURE_KEY, JSON.stringify(parsed));
+    history.replaceState(null, '', location.pathname + location.search);
+    loadFigmaCaptureScript(function() {
+      mountFigmaManualCaptureBar(parsed);
+    });
+    return;
+  }
+
+  loadFigmaCaptureScript();
 })();
+
+function buildFigmaCaptureHash(captureId, manual) {
+  var endpoint = 'https://mcp.figma.com/mcp/capture/' + captureId + '/submit';
+  var hash = 'figmacapture=' + captureId + '&figmaendpoint=' + encodeURIComponent(endpoint);
+  if (manual !== false) hash += '&figmamanual=1';
+  else hash += '&figmadelay=1500';
+  return hash;
+}
+
+function buildFigmaManualCaptureUrl(htmlPath, captureId) {
+  var base = window.location.href.replace(/[#?].*$/, '');
+  var dir = base.replace(/[^/]+$/, '');
+  return dir + htmlPath + '#' + buildFigmaCaptureHash(captureId, true);
+}
 
 function openModal(id) {
   document.getElementById(id).classList.remove('hidden');
@@ -651,9 +765,13 @@ function initKstBuchungssaetzePage() {
   if (sw) {
     sw.addEventListener('change', function() {
       if (existingBlock) existingBlock.classList.toggle('hidden', !sw.checked);
+      var autoInfo = document.getElementById('kstProvisionAutoInfo');
+      if (autoInfo) autoInfo.classList.toggle('hidden', !sw.checked);
       recalcKstTax(true);
     });
     if (existingBlock) existingBlock.classList.toggle('hidden', !sw.checked);
+    var autoInfo = document.getElementById('kstProvisionAutoInfo');
+    if (autoInfo) autoInfo.classList.toggle('hidden', !sw.checked);
   }
 
   recalcKstTax(true);
@@ -671,12 +789,9 @@ function initKstDashboardPage() {
   var breakdown = computeKstTaxBreakdown(KST_DEFAULT_RATE);
   kstEl.textContent = formatAmountDotted(breakdown.kstGross);
   var soliEl = document.getElementById('dashboardKstSoli');
-  if (soliEl) soliEl.textContent = formatAmountDotted(breakdown.netSoli);
-  var entriesEl = document.getElementById('dashboardKstEntries');
-  if (entriesEl) {
-    var deltas = computeKstBookingDeltas(breakdown, true);
-    entriesEl.textContent = formatAmountDotted(deltas.deltaTotal);
-  }
+  if (soliEl) soliEl.textContent = formatAmountDotted(breakdown.grossSoli);
+  var totalEl = document.getElementById('dashboardKstTotal');
+  if (totalEl) totalEl.textContent = formatAmountDotted(breakdown.netTotal);
 }
 
 function initKstFormPreview() {
