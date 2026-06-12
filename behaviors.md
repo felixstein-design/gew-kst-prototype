@@ -34,8 +34,8 @@ No separate Einreichen step.
 
 ## Happy paths
 
-- **Speichern:** `01` → Modal → `02` → `03` → `04` → `05` (Jetzt nicht einreichen) → **Speichern** → `06` (Gespeichert)
-- **Senden:** `01` → … → `05` (Sofort einreichen) → **Senden** → `07` (Eingereicht)
+- **Speichern:** `01` → Modal → `02` → `03` → `04` → `05` (Jetzt nicht einreichen) → **Speichern** → `06` (Fertig)
+- **Senden:** `01` → … → `05` (Sofort einreichen) → **Senden** → `07` (Übermittelt)
 
 ## Key behaviors
 
@@ -51,7 +51,7 @@ No separate Einreichen step.
 | Finish later | → `05_dashboard-in-progress`, In Bearbeitung |
 | Footer buttons | Centered as a group on wizard screens |
 | Dashboard table | Zeitraum · Erstellt von · Status · Zuletzt geändert · Gewerbeertrag · Steuermessbetrag · Gewerbesteuer · Buchungssätze · Aktionen |
-| Dashboard Ansehen | → `04_erklaerung_pruefen.html` (Eingereicht) |
+| Dashboard Ansehen | → `04_erklaerung_pruefen.html` (Übermittelt) |
 
 ### GewSt 1 A — filled fields (Screen 4)
 

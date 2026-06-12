@@ -386,8 +386,10 @@ body {
 .badge-neutral    { background: #e4e5e7; color: #141a1f; }
 .badge-neutral .ms { color: #6c767f; }
 
-/* Success — "Eingereicht" */
+/* Success — submitted to Finanzverwaltung */
+.badge-uebermittelt,
 .badge-eingereicht { background: #d2eeda; color: #141a1f; }
+.badge-uebermittelt .ms,
 .badge-eingereicht .ms { color: #23a84b; }
 
 /* Info — "Zu erledigen" */
@@ -1391,8 +1393,10 @@ body {
 
 .badge-in-bearbeitung { background: #d2e3ff; color: #141a1f; }
 .badge-in-bearbeitung .ms { color: #1c73ff; }
-.badge-gespeichert { background: #e4e5e7; color: #141a1f; }
-.badge-gespeichert .ms { color: #6c767f; }
+.badge-fertig,
+.badge-gespeichert { background: #e6f4f2; color: #141a1f; }
+.badge-fertig .ms,
+.badge-gespeichert .ms { color: #006666; }
 
 .empty-state {
   display: flex;
